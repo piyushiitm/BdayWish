@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Letter For You</title>
+
+<!-- High-End Premium Typography -->
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Outfit:wght@400;600;700&family=Playfair+Display:ital,wght@1,600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* --- THE LIGHT AURORA BACKGROUND --- */
+    body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; 
+        background: #ffe5e5;
+        font-family: 'Poppins', sans-serif;
+        overflow-x: hidden;
+        padding: 3rem 1rem 6rem 1rem;
+        perspective: 1500px;
+    }
+
+    /* Animated background elements (From Login Page) */
+    .bg-aurora {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        z-index: -2;
+        background: radial-gradient(circle at 15% 50%, rgba(255, 182, 193, 0.6) 0%, transparent 50%),
+                    radial-gradient(circle at 85% 30%, rgba(255, 218, 185, 0.7) 0%, transparent 50%),
+                    radial-gradient(circle at 50% 80%, rgba(255, 192, 203, 0.5) 0%, transparent 50%);
+        filter: blur(60px);
+        animation: auroraShift 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes auroraShift {
+        0% { transform: scale(1) translate(0px, 0px); }
+        50% { transform: scale(1.1) translate(30px, -30px); }
+        100% { transform: scale(1) translate(-30px, 30px); }
+    }
+
+    /* Particle overlays */
+    .particles {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px);
+        background-size: 40px 40px;
+        opacity: 0.3;
+        z-index: -1;
+    }
+
+    /* --- THE HANGING MECHANISM --- */
+    .scroll-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
+        /* Pivot point set EXACTLY to the center of the nail */
+        transform-origin: 50% 8px; 
+        opacity: 0;
+        
+        /* Softer drop shadow for the light background */
+        filter: drop-shadow(0 30px 25px rgba(255, 107, 129, 0.25));
+        
+        /* Interactive styling */
+        cursor: pointer;
+        transition: filter 0.3s ease;
+    }
+
+    .scroll-wrapper:hover {
+        filter: drop-shadow(0 35px 35px rgba(255, 107, 129, 0.35));
+    }
+
+    /* Triggers the drop and pendulum swing on load */
+    .scroll-wrapper.swing {
+        animation: dropAndSway 4.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    /* The Nail */
+    .nail {
+        width: 14px; 
+        height: 14px;
+        background: radial-gradient(circle at 35% 35%, #f1d18a 0%, #c49931 50%, #8a6411 100%);
+        border-radius: 50%;
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 4px 6px rgba(255, 107, 129, 0.4);
+    }
+
+    /* The String connecting the nail to the rod */
+    .hanging-cords {
+        width: 104%; 
+        height: 80px;
+        position: relative;
+        top: -8px; 
+        z-index: 1;
+    }
+
+    /* Group for Rods + Paper */
+    .scroll-content-group {
+        width: 100%;
+        position: relative;
+        top: -12px; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+    /* --- THE CYLINDRICAL RODS --- */
+    .scroll-rod {
+        width: 104%; 
+        height: 32px; 
+        background: linear-gradient(to bottom, #f9e29a 0%, #fff 25%, #d1a535 60%, #9e7314 100%);
+        border-radius: 16px;
+        box-shadow: inset 0 2px 5px rgba(255,255,255,0.9), 0 5px 15px rgba(255, 107, 129, 0.2);
+        z-index: 5;
+        position: relative;
+    }
+
+    .scroll-rod::before, .scroll-rod::after {
+        content: "";
+        position: absolute;
+        top: -2px;
+        width: 16px;
+        height: 36px;
+        background: linear-gradient(to bottom, #d1a535 0%, #fff 30%, #9e7314 100%);
+        border-radius: 8px;
+        box-shadow: 3px 0 6px rgba(0,0,0,0.15);
+    }
+    .scroll-rod::before { left: -8px; }
+    .scroll-rod::after { right: -8px; box-shadow: -3px 0 6px rgba(0,0,0,0.15); }
+
+    .bottom-rod {
+        transition: transform 3s cubic-bezier(0.34, 1.05, 0.64, 1);
+        transform-origin: center;
+    }
+
+
+    /* --- THE CLICK HINT --- */
+    .click-hint {
+        position: absolute;
+        bottom: -40px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #ff6b81;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        animation: pulseHint 2s infinite ease-in-out;
+        transition: opacity 0.5s ease;
+        pointer-events: none;
+    }
+
+    @keyframes pulseHint {
+        0%, 100% { transform: translateY(0); opacity: 0.6; }
+        50% { transform: translateY(5px); opacity: 1; }
+    }
+
+
+    /* --- THE PAPER & MASK --- */
+    .scroll-mask {
+        width: 100%;
+        height: 0px; 
+        overflow: hidden;
+        position: relative;
+        transition: height 3s cubic-bezier(0.34, 1.05, 0.64, 1);
+    }
+
+    .scroll-mask::after {
+        content: "";
+        position: absolute;
+        bottom: 0; left: 0; width: 100%; height: 30px;
+        background: linear-gradient(to bottom, transparent 0%, rgba(255, 107, 129, 0.1) 100%);
+        pointer-events: none;
+        z-index: 3;
+    }
+
+    .scroll-paper {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.85); 
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+        border-left: 1px solid rgba(255, 255, 255, 0.8);
+        border-right: 1px solid rgba(255, 255, 255, 0.8);
+        padding: 4.5rem 5rem;
+        
+        box-shadow: inset 15px 0 25px rgba(255, 107, 129, 0.04), 
+                    inset -15px 0 25px rgba(255, 107, 129, 0.04);
+    }
+
+
+    /* --- TYPOGRAPHY --- */
+    .greeting {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #ff4757;
+        margin-bottom: 2rem;
+        letter-spacing: 1px;
+    }
+
+    .greeting span {
+        font-family: 'Alex Brush', cursive;
+        font-size: 3.8rem;
+        background: linear-gradient(to right, #ff4757, #ff8a9a);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-left: 8px;
+        vertical-align: middle;
+    }
+
+    .letter-body {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #4a4a4a;
+        font-weight: 400;
+    }
+
+    .letter-body p { margin-bottom: 1.5rem; }
+
+    .highlight-quote {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 1.25rem;
+        color: #ff6b81;
+        text-align: center;
+        margin: 2.5rem 0;
+        padding: 0 2rem;
+        border-left: 3px solid #ff8a9a;
+        border-right: 3px solid #ff8a9a;
+    }
+
+    .hashtag {
+        font-family: 'Outfit', sans-serif;
+        font-weight: 700;
+        color: #ff8a9a;
+        letter-spacing: 2px;
+        margin-top: 2rem;
+    }
+
+    .signature {
+        margin-top: 3rem;
+        text-align: right;
+    }
+
+    .signature .yours {
+        font-size: 1rem;
+        color: #8fa0ad;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: -10px;
+        display: block;
+    }
+
+    .signature .name {
+        font-family: 'Alex Brush', cursive;
+        font-size: 3.5rem;
+        color: #ff4757;
+        text-shadow: 2px 2px 5px rgba(255, 71, 87, 0.1);
+    }
+
+    /* --- PENDULUM SWING ANIMATION --- */
+    @keyframes dropAndSway {
+        0% { opacity: 0; transform: translateY(-50px) rotateZ(6deg); }
+        15% { opacity: 1; transform: translateY(0) rotateZ(-3deg); }
+        35% { transform: rotateZ(2deg); }
+        55% { transform: rotateZ(-1deg); }
+        75% { transform: rotateZ(0.5deg); }
+        100% { opacity: 1; transform: rotateZ(0deg); }
+    }
+
+    /* --- THE NEXT BUTTON --- */
+    .next-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        padding: 12px 28px;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 50px;
+        color: #ff4757;
+        font-family: 'Outfit', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-decoration: none;
+        box-shadow: 0 10px 25px rgba(255, 107, 129, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
+        /* Starts hidden */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 100;
+    }
+
+    /* Class added by JS to reveal it */
+    .next-btn.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .next-btn:hover {
+        background: rgba(255, 255, 255, 0.95);
+        transform: translateY(-4px);
+        box-shadow: 0 15px 30px rgba(255, 107, 129, 0.3);
+        color: #ff3b4c;
+    }
+
+    .next-btn span {
+        font-size: 1.3rem;
+        transition: transform 0.3s ease;
+    }
+
+    .next-btn:hover span {
+        transform: translateX(4px);
+    }
+
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        body { padding: 2rem 1rem 7rem 1rem; }
+        .hanging-cords { height: 60px; }
+        .scroll-rod { width: 106%; height: 28px; }
+        .scroll-paper { padding: 2.5rem 1.5rem; }
+        .greeting { font-size: 1.2rem; }
+        .greeting span { font-size: 3rem; }
+        .letter-body { font-size: 1rem; line-height: 1.7; }
+        .highlight-quote { font-size: 1.1rem; padding: 0 1rem; margin: 1.5rem 0; }
+        .signature .name { font-size: 2.8rem; }
+        
+        /* Next button repositioned for mobile */
+        .next-btn {
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 22px;
+            font-size: 1rem;
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- Light Ethereal Background + Particles -->
+<div class="bg-aurora"></div>
+<div class="particles"></div>
+
+<div class="scroll-wrapper" id="letterScroll">
+    
+    <!-- The Nail -->
+    <div class="nail"></div>
+
+    <!-- Scalable Vector Cords -->
+    <svg class="hanging-cords" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M50 0 L1 100 M50 0 L99 100" stroke="#d1a535" stroke-width="2" vector-effect="non-scaling-stroke" fill="none" />
+    </svg>
+
+    <div class="scroll-content-group">
+        <!-- Top Rod -->
+        <div class="scroll-rod"></div>
+
+        <!-- The Mask that hides the paper -->
+        <div class="scroll-mask" id="scrollMask">
+            
+            <!-- The Paper with content -->
+            <div class="scroll-paper" id="scrollPaper">
+                
+                <div class="greeting">
+                    Happiest birthday to my dear <span>Chhutki...</span>
+                </div>
+
+                <div class="letter-body">
+                    <p>Haa pta h mujhe, mere kuch time ke behaviour se tujhe ye baat jhooth lag rhi hogi. But shi me, a very very very very happy birthday to you.</p>
+
+                    <p>Tu janti to h hi mujhe. Jitna meri life me kya chal rha h tu janti h, utna to shayad hi koi or janta ho. You know every aspect of my situation. Me krna nhi chahta, wesa behave apne aap krne lag gya hu, or me dil se maafi chahta hu. Chahta hu tu mujhe maaf kre, me dil se chahta hu ki me tujhko maaf krdu, or in sab cheezo se aage badh kr khud bhi khush rahu or tujhe khush krne ke liye bhi sab kuch kar paau jesa me aaj tk krta aaya hu. And I promise you I will try my best.</p>
+
+                    <p>Yaad h pichli baar wala letter? Kuch waade kiye the mene unme, pr bhagwan se kuch maanga bhi tha tere liye...</p>
+
+                    <div class="highlight-quote">
+                        "May God remove every obstacle that obstructs you, be it me."
+                    </div>
+
+                    <p>And I believe shayad isiliye ham dono ke beech ki dooriyan badh gyi h. But I promise you one more thing today: I will try my best to not be that obstacle and be a staircase for you to climb upon to the wishes of your life.</p>
+
+                    <p>Bhot kuch kiya tune mere liye bhi, kuch cheeze kar nhi paayi. Par mene un kuch cheezo ke liye tujhe zaroorat se bhot jada suna diya or bhot baar. Me iske liye tujhse maafi maangna chahta hu or abhi mangta bhi hu. And I promise you from today onwards I will never speak in such manner. If I am ever angry on you, I will take a break, gather my calm, and then will come talk to you.</p>
+
+                    <p>Please let go of everything bad that has happened between us, and with me contribute to those huge collection of memories that we uphold together as one of the best memories of our life.</p>
+
+                    <p>Tune mujhko mana kar diya gift dene ke liye, kaha to enjoy nhi kr paati. To isiliye mene is baari ye cheez tujhe dene ke liye socha. Ye website hamari bhot sari memories ko mene sanjo kr banayi h. I really hope tujhko pasand aaygi or tera ye birthday bhi yaadgaar hoga.</p>
+
+                    <p>Or me chahta hu tera ye saal pichle saal se bilkul hatke rahe, sab bhot achha ho, or ham log khub sari memories banaye sath me. Once again, a Very Very Very Happy Birthday To My Dear Chhutki.</p>
+
+                    <div class="hashtag"># SAC</div>
+                </div>
+
+                <div class="signature">
+                    <span class="yours">From Yours,</span><br>
+                    <span class="name">Phunsukh Wangdu</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Bottom Rod -->
+        <div class="scroll-rod bottom-rod" id="bottomRod">
+            <!-- Click hint anchored to the bottom rod -->
+            <div class="click-hint" id="clickHint">Click to unroll</div>
+        </div>
+    </div>
+</div>
+
+<!-- The Floating Next Button (Target link can be changed in the href attribute) -->
+<a href="/20thBirthday" class="next-btn" id="nextBtn">
+    Next <span>➔</span>
+</a>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const wrapper = document.getElementById('letterScroll');
+        const scrollMask = document.getElementById('scrollMask');
+        const scrollPaper = document.getElementById('scrollPaper');
+        const bottomRod = document.getElementById('bottomRod');
+        const clickHint = document.getElementById('clickHint');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        let isOpened = false;
+
+        // 1. Drop into the scene on load
+        setTimeout(() => {
+            wrapper.classList.add('swing');
+        }, 300); 
+
+        // 2. Unroll logic on click
+        wrapper.addEventListener('click', () => {
+            if (isOpened) return; // Prevent multiple clicks
+            isOpened = true;
+
+            // Remove pointer cursor and hint
+            wrapper.style.cursor = 'default';
+            clickHint.style.opacity = '0';
+
+            // Calculate height
+            const paperHeight = scrollPaper.scrollHeight;
+            scrollMask.style.height = paperHeight + 'px';
+
+            // Calculate exact rotations for the bottom rod (Circumference = Pi * 32)
+            const rotations = paperHeight / (Math.PI * 32);
+            bottomRod.style.transform = `rotateX(-${rotations * 360}deg)`;
+
+            // 3. Reveal the "Next" button smoothly after the scroll finishes unrolling (approx 3 seconds)
+            setTimeout(() => {
+                nextBtn.classList.add('show');
+            }, 3000);
+        });
+    });
+</script>
+
+</body>
+</html>

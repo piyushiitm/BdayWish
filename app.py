@@ -19,5 +19,12 @@ def login():
         error="Bhool Gyi 😒!"
     )
 
+@app.route("/Message")
+def message():
+    return render_template("message.html")
+
+@app.route("/20thBirthday")
+def lastbday():
+    return render_template("LastBday.html")
 if __name__ == "__main__":
     app.run(debug=True)
