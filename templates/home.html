@@ -1,5 +1,526 @@
 <!DOCTYPE html>
-<head><title>HappyBirthday</title></head>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countdown to 21</title>
+
+<!-- High-End Premium Typography -->
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Outfit:wght@400;700;800&family=Playfair+Display:ital,wght@1,600&family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+
+<!-- Confetti Script -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        /* NEW Premium Ethereal Aurora Background */
+        background: #ffe5e5;
+        overflow: hidden;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Animated background elements for depth */
+    .bg-aurora {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        z-index: -2;
+        background: radial-gradient(circle at 15% 50%, rgba(255, 182, 193, 0.6) 0%, transparent 50%),
+                    radial-gradient(circle at 85% 30%, rgba(255, 218, 185, 0.7) 0%, transparent 50%),
+                    radial-gradient(circle at 50% 80%, rgba(255, 192, 203, 0.5) 0%, transparent 50%);
+        filter: blur(60px);
+        animation: auroraShift 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes auroraShift {
+        0% { transform: scale(1) translate(0px, 0px); }
+        50% { transform: scale(1.1) translate(30px, -30px); }
+        100% { transform: scale(1) translate(-30px, 30px); }
+    }
+
+    /* Particle overlays */
+    .particles {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px);
+        background-size: 40px 40px;
+        opacity: 0.3;
+        z-index: -1;
+    }
+
+    /* --- THE COUNTDOWN UI --- */
+    .container {
+        text-align: center;
+        padding: 3.5rem 3rem;
+        /* Ultimate 3D Glass Effect */
+        background: rgba(255, 255, 255, 0.25); 
+        border-radius: 30px;
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-top: 1px solid rgba(255, 255, 255, 0.8);
+        border-left: 1px solid rgba(255, 255, 255, 0.6);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 25px 45px rgba(255, 107, 129, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.5);
+        transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); 
+        z-index: 10;
+    }
+
+    #countdown {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .time-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 110px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 20px; 
+        border-top: 2px solid rgba(255, 255, 255, 1);
+        border-left: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 10px 25px rgba(255, 107, 129, 0.1), inset 0 -4px 10px rgba(0,0,0,0.02);
+        transition: transform 0.3s ease;
+    }
+
+    .time-box:hover {
+        transform: translateY(-5px);
+    }
+
+    .time-box span {
+        font-family: 'Outfit', sans-serif;
+        font-size: 3.8rem;
+        font-weight: 800;
+        /* Text Gradient */
+        background: linear-gradient(135deg, #ff4757 0%, #ff8a9a 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+        font-variant-numeric: tabular-nums; 
+        margin-top: 5px;
+    }
+
+    .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #8fa0ad; 
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-top: 4px;
+    }
+
+    .separator {
+        font-family: 'Outfit', sans-serif;
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: rgba(255, 107, 129, 0.6);
+        transform: translateY(-10px);
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+    }
+
+    .message {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        font-style: italic;
+        color: #4a4a4a;
+        letter-spacing: 0.5px;
+        text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+    }
+
+    /* --- THE BIRTHDAY REVEAL OVERLAY --- */
+    #birthday {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: radial-gradient(circle at center, rgba(255,249,240,0.95) 0%, rgba(255,227,227,0.95) 100%);
+        backdrop-filter: blur(10px);
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 1.5s ease, visibility 1.5s ease;
+    }
+
+    #birthday.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* --- REALISTIC BALLOONS CSS (Kept & Enhanced) --- */
+    .balloons-container {
+        position: absolute; width: 100%; height: 100%; top: 0; left: 0; overflow: hidden; pointer-events: none; z-index: 1; 
+    }
+    .balloon-wrapper {
+        position: absolute; bottom: -200px; left: var(--x); animation: floatUp var(--duration) linear infinite; animation-delay: var(--delay); opacity: 0;
+    }
+    #birthday.show .balloon-wrapper { opacity: 1; }
+    .balloon {
+        position: relative; width: 75px; height: 95px;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.3) 15%, var(--c) 35%, var(--dark) 100%);
+        border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
+        box-shadow: inset -5px -5px 15px rgba(0,0,0,0.15), 0 10px 15px rgba(0,0,0,0.05);
+        animation: sway 3s ease-in-out infinite alternate; transform-origin: bottom center;
+    }
+    .balloon::before {
+        content: ""; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 10px solid var(--dark);
+    }
+    .string {
+        position: absolute; bottom: -70px; left: 50%; width: 20px; height: 70px; border-right: 1px solid rgba(0, 0, 0, 0.25); border-radius: 50%; transform: translateX(-15px); z-index: -1;
+    }
+    @keyframes floatUp {
+        0% { transform: translateY(0) scale(var(--s)); }
+        100% { transform: translateY(-130vh) scale(var(--s)); }
+    }
+    @keyframes sway {
+        0% { transform: rotate(-6deg); }
+        100% { transform: rotate(6deg); }
+    }
+
+    /* --- THE PREMIUM BIRTHDAY CARD --- */
+    .birthday-card {
+        background: rgba(255, 255, 255, 0.85);
+        padding: 4rem 5rem;
+        border-radius: 40px;
+        border-top: 2px solid #ffffff;
+        border-left: 2px solid #ffffff;
+        box-shadow: 0 30px 60px rgba(255, 107, 129, 0.2), inset 0 0 30px rgba(255,255,255,1);
+        backdrop-filter: blur(15px);
+        text-align: center;
+        transform: scale(0.8) translateY(30px);
+        opacity: 0;
+        position: relative;
+        z-index: 10;
+    }
+
+    #birthday.show .birthday-card {
+        animation: popCard 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards, floatCard 5s ease-in-out infinite alternate;
+        animation-delay: 0.3s, 1.5s; 
+    }
+
+    .birthday-card h1 {
+        font-family: 'Outfit', sans-serif;
+        font-size: clamp(20px, 3vw, 24px); 
+        color: #ff6b81; 
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: -15px;
+        font-weight: 700;
+    }
+
+    .name-highlight {
+        font-family: 'Alex Brush', cursive;
+        font-size: clamp(80px, 14vw, 150px);
+        /* Gorgeous Gradient for Name */
+        background: linear-gradient(to right, #ff4757, #ff8a9a);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: block;
+        line-height: 1.3;
+        padding-top: 10px;
+        filter: drop-shadow(0px 10px 10px rgba(255, 107, 129, 0.2));
+    }
+
+    .birthday-card h2 {
+        font-family: 'Poppins', sans-serif;
+        color: #7a8b99;
+        font-size: clamp(16px, 2.5vw, 20px);
+        font-weight: 500;
+        letter-spacing: 2px;
+        margin-bottom: 35px; 
+    }
+
+    .chapter {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 28px;
+        color: #ff4757;
+        font-weight: 600;
+        padding: 0 5px;
+    }
+
+    /* --- ULTIMATE FORM UI --- */
+    .unlock-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .styled-input {
+        width: 100%;
+        max-width: 320px;
+        padding: 16px 24px;
+        border: 2px solid transparent;
+        border-radius: 50px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px;
+        color: #333;
+        background: #f8f9fa;
+        /* Inset shadow for depth */
+        box-shadow: inset 0 3px 6px rgba(0,0,0,0.04), 0 4px 10px rgba(255,255,255,1);
+        outline: none;
+        text-align: center;
+        transition: all 0.4s ease;
+    }
+
+    .styled-input:focus {
+        background: #ffffff;
+        border-color: #ff8a9a;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.02), 0 0 15px rgba(255, 107, 129, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .styled-input::placeholder {
+        color: #aeb9c2;
+        font-weight: 400;
+        letter-spacing: 1px;
+    }
+
+    .styled-button {
+        position: relative;
+        overflow: hidden;
+        padding: 16px 40px;
+        border: none;
+        border-radius: 50px;
+        /* Rich gradient button */
+        background: linear-gradient(45deg, #ff4757 0%, #ff8a9a 100%);
+        color: white;
+        font-family: 'Outfit', sans-serif;
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3), inset 0 -3px 5px rgba(0,0,0,0.1);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .styled-button:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 15px 25px rgba(255, 71, 87, 0.4), inset 0 -3px 5px rgba(0,0,0,0.1);
+    }
+
+    .styled-button:active {
+        transform: translateY(2px);
+        box-shadow: 0 5px 10px rgba(255, 71, 87, 0.2);
+    }
+
+    .error-msg {
+        background: rgba(255, 71, 87, 0.08);
+        border-left: 3px solid #ff4757;
+        color: #d63031;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 10px 18px;
+        border-radius: 8px;
+        margin-top: -5px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Keyframes for Card */
+    @keyframes popCard {
+        0% { transform: scale(0.8) translateY(40px); opacity: 0; }
+        100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    @keyframes floatCard {
+        0% { transform: translateY(0px); }
+        100% { transform: translateY(-12px); }
+    }
+
+    /* --- MOBILE RESPONSIVENESS --- */
+    @media (max-width: 768px) {
+        .container { padding: 2.5rem 1rem; width: 92%; }
+        #countdown { gap: 8px; margin-bottom: 1.5rem; }
+        .time-box { width: 70px; height: 85px; border-radius: 14px; }
+        .time-box span { font-size: 2.5rem; }
+        .separator { font-size: 2.5rem; transform: translateY(-5px); }
+        .message { font-size: 1.3rem; }
+        .birthday-card { padding: 3rem 1.5rem; width: 92%; }
+    }
+</style>
+
+</head>
 <body>
+
+<!-- Dynamic Background Elements -->
+<div class="bg-aurora"></div>
+<div class="particles"></div>
+
+<div class="container" id="main-container">
+    <div id="countdown">
+        <div class="time-box">
+            <span id="days">00</span>
+            <div class="label">Days</div>
+        </div>
+        <div class="separator">:</div>
+        <div class="time-box">
+            <span id="hours">00</span>
+            <div class="label">Hours</div>
+        </div>
+        <div class="separator">:</div>
+        <div class="time-box">
+            <span id="minutes">00</span>
+            <div class="label">Mins</div>
+        </div>
+        <div class="separator">:</div>
+        <div class="time-box">
+            <span id="seconds">00</span>
+            <div class="label">Secs</div>
+        </div>
+    </div>
+
+    <div class="message">
+        Time to our Special Day!
+    </div>
+</div>
+
+<div id="birthday">
     
+    <div class="balloons-container">
+        <div class="balloon-wrapper" style="--c: #ff4757; --dark: #c0392b; --x: 10%; --delay: 0s; --duration: 7s; --s: 1.1;">
+            <div class="balloon"><div class="string"></div></div>
+        </div>
+        <div class="balloon-wrapper" style="--c: #f6d365; --dark: #d4a72c; --x: 25%; --delay: 1.5s; --duration: 8s; --s: 0.9;">
+            <div class="balloon"><div class="string"></div></div>
+        </div>
+        <div class="balloon-wrapper" style="--c: #4facfe; --dark: #2785d1; --x: 45%; --delay: 0.5s; --duration: 6.5s; --s: 1.2;">
+            <div class="balloon"><div class="string"></div></div>
+        </div>
+        <div class="balloon-wrapper" style="--c: #ff9a9e; --dark: #d8696e; --x: 65%; --delay: 2.2s; --duration: 9s; --s: 0.85;">
+            <div class="balloon"><div class="string"></div></div>
+        </div>
+        <div class="balloon-wrapper" style="--c: #ff6b81; --dark: #cc4d61; --x: 85%; --delay: 1s; --duration: 7.5s; --s: 1.05;">
+            <div class="balloon"><div class="string"></div></div>
+        </div>
+    </div>
+
+    <div class="birthday-card">
+        <h1>Happiest Birthday to</h1>
+        <span class="name-highlight">My Dear Chhutki</span>
+        <h2>Welcome to your <span class="chapter">21st Chapter</span> ❤️</h2>
+        
+        <!-- Premium UI Form -->
+        <form action="/login" method="POST" class="unlock-form">
+            <input
+                type="password"
+                name="password"
+                placeholder="BME Wale Sir ka naam"
+                class="styled-input"
+                required
+            >
+            
+            {% if error %}
+            <div class="error-msg">
+                 {{ error }}
+            </div>
+            {% endif %}
+
+            <button type="submit" class="styled-button">
+                Unlock Our Journey ✨
+            </button>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    const targetDate = new Date("July 21, 2026 16:28:00").getTime();
+
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+    const mainContainer = document.getElementById("main-container");
+    const birthdayScreen = document.getElementById("birthday");
+
+    function fireConfetti() {
+        var duration = 5 * 1000;
+        var end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 7,
+                angle: 60,
+                spread: 65,
+                origin: { x: 0, y: 0.8 },
+                colors: ['#ff4757', '#ff8a9a', '#ffffff', '#ffd0d5'],
+                zIndex: 9999 
+            });
+            confetti({
+                particleCount: 7,
+                angle: 120,
+                spread: 65,
+                origin: { x: 1, y: 0.8 },
+                colors: ['#ff4757', '#ff8a9a', '#ffffff', '#ffd0d5'],
+                zIndex: 9999 
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    }
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance <= 0) {
+            clearInterval(timer);
+            daysEl.innerHTML = "00"; hoursEl.innerHTML = "00";
+            minutesEl.innerHTML = "00"; secondsEl.innerHTML = "00";
+
+            // Elegant fade out
+            mainContainer.style.transform = "scale(0.9)";
+            mainContainer.style.opacity = "0";
+
+            setTimeout(() => {
+                mainContainer.style.display = "none"; 
+                birthdayScreen.classList.add("show"); 
+                setTimeout(fireConfetti, 600);
+            }, 1000); 
+
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        daysEl.innerHTML = String(days).padStart(2, '0');
+        hoursEl.innerHTML = String(hours).padStart(2, '0');
+        minutesEl.innerHTML = String(minutes).padStart(2, '0');
+        secondsEl.innerHTML = String(seconds).padStart(2, '0');
+    }
+
+    const timer = setInterval(updateCountdown, 1000);
+    updateCountdown(); 
+</script>
+
 </body>
+</html>
