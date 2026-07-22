@@ -15,199 +15,196 @@
         box-sizing: border-box;
     }
 
-    /* --- THE LIGHT AURORA BACKGROUND --- */
+    html, body {
+        height: auto;
+        min-height: 100%;
+    }
+
     body {
         min-height: 100vh;
         display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
-        align-items: flex-start; 
-        background: #ffe5e5;
+        background: #fdfaf6; 
         font-family: 'Poppins', sans-serif;
         overflow-x: hidden;
-        padding: 3rem 1rem 6rem 1rem;
-        perspective: 1500px;
+        padding: 3rem 1rem 7rem 1rem;
+        color: #3b3b3b;
     }
 
-    /* Animated background elements (From Login Page) */
+    /* Once the letter opens, the page becomes taller than the viewport.
+       Switch to top-alignment so nothing renders above the reachable scroll area. */
+    body.letter-open {
+        justify-content: flex-start;
+    }
+
+    /* --- DREAMY SCRAPBOOK BACKGROUND --- */
     .bg-aurora {
         position: fixed;
         top: 0; left: 0; width: 100vw; height: 100vh;
-        z-index: -2;
-        background: radial-gradient(circle at 15% 50%, rgba(255, 182, 193, 0.6) 0%, transparent 50%),
-                    radial-gradient(circle at 85% 30%, rgba(255, 218, 185, 0.7) 0%, transparent 50%),
-                    radial-gradient(circle at 50% 80%, rgba(255, 192, 203, 0.5) 0%, transparent 50%);
-        filter: blur(60px);
-        animation: auroraShift 15s ease-in-out infinite alternate;
+        z-index: -3;
+        background: radial-gradient(circle at 15% 50%, rgba(255, 182, 193, 0.4) 0%, transparent 60%),
+                    radial-gradient(circle at 85% 30%, rgba(255, 218, 185, 0.5) 0%, transparent 60%),
+                    radial-gradient(circle at 50% 80%, rgba(255, 192, 203, 0.3) 0%, transparent 60%);
+        filter: blur(40px);
     }
 
-    @keyframes auroraShift {
-        0% { transform: scale(1) translate(0px, 0px); }
-        50% { transform: scale(1.1) translate(30px, -30px); }
-        100% { transform: scale(1) translate(-30px, 30px); }
-    }
-
-    /* Particle overlays */
-    .particles {
+    .paper-texture {
         position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
-        background-image: radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px);
-        background-size: 40px 40px;
-        opacity: 0.3;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        z-index: -2;
+        pointer-events: none;
+    }
+
+    /* Background Faded Memories */
+    .bg-memory {
+        position: fixed;
         z-index: -1;
+        opacity: 0.15;
+        filter: blur(4px); 
+        border-radius: 20px;
+        pointer-events: none;
     }
+    .bg-1 { top: 50%; left: -15%; width: 650px; transform: translateY(-50%) rotate(-12deg); }
+    .bg-2 { bottom: 10%; right: -10%; width: 500px; transform: rotate(20deg); }
+    .bg-3 { top: 40%; right: 5%; width: 300px; transform: rotate(-10deg); }
 
-    /* --- THE HANGING MECHANISM --- */
-    .scroll-wrapper {
+    /* --- STAGE CONTAINER (grid "stack" so it always sizes to the tallest child) --- */
+    .stage {
         position: relative;
         width: 100%;
-        max-width: 800px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        
-        /* Pivot point set EXACTLY to the center of the nail */
-        transform-origin: 50% 8px; 
-        opacity: 0;
-        
-        /* Softer drop shadow for the light background */
-        filter: drop-shadow(0 30px 25px rgba(255, 107, 129, 0.25));
-        
-        /* Interactive styling */
+        max-width: 850px;
+        display: grid;
+    }
+
+    /* --- VINTAGE ENVELOPE --- */
+    .envelope-wrapper {
+        grid-column: 1;
+        grid-row: 1;
+        justify-self: center;
+        align-self: center;
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        height: 340px;
+        background: #fff5f5;
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(255, 107, 129, 0.2);
         cursor: pointer;
-        transition: filter 0.3s ease;
-    }
-
-    .scroll-wrapper:hover {
-        filter: drop-shadow(0 35px 35px rgba(255, 107, 129, 0.35));
-    }
-
-    /* Triggers the drop and pendulum swing on load */
-    .scroll-wrapper.swing {
-        animation: dropAndSway 4.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    }
-
-    /* The Nail */
-    .nail {
-        width: 14px; 
-        height: 14px;
-        background: radial-gradient(circle at 35% 35%, #f1d18a 0%, #c49931 50%, #8a6411 100%);
-        border-radius: 50%;
-        position: relative;
-        z-index: 10;
-        box-shadow: 0 4px 6px rgba(255, 107, 129, 0.4);
-    }
-
-    /* The String connecting the nail to the rod */
-    .hanging-cords {
-        width: 104%; 
-        height: 80px;
-        position: relative;
-        top: -8px; 
-        z-index: 1;
-    }
-
-    /* Group for Rods + Paper */
-    .scroll-content-group {
-        width: 100%;
-        position: relative;
-        top: -12px; 
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
         display: flex;
-        flex-direction: column;
+        justify-content: center;
         align-items: center;
+        border: 2px solid rgba(255, 138, 154, 0.3);
     }
 
+    .envelope-wrapper:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(255, 107, 129, 0.3);
+    }
 
-    /* --- THE CYLINDRICAL RODS --- */
-    .scroll-rod {
-        width: 104%; 
-        height: 32px; 
-        background: linear-gradient(to bottom, #f9e29a 0%, #fff 25%, #d1a535 60%, #9e7314 100%);
-        border-radius: 16px;
-        box-shadow: inset 0 2px 5px rgba(255,255,255,0.9), 0 5px 15px rgba(255, 107, 129, 0.2);
+    /* Envelope Flap Effect */
+    .envelope-flap {
+        position: absolute;
+        top: 0; left: 0; width: 0; height: 0;
+        border-left: 250px solid transparent;
+        border-right: 250px solid transparent;
+        border-top: 170px solid #ffd1d6;
+        transform-origin: top;
+        transition: transform 0.6s ease;
+        z-index: 4;
+    }
+
+    .envelope-text {
+        text-align: center;
         z-index: 5;
-        position: relative;
+        pointer-events: none;
+        padding-top: 40px;
     }
 
-    .scroll-rod::before, .scroll-rod::after {
-        content: "";
-        position: absolute;
-        top: -2px;
-        width: 16px;
-        height: 36px;
-        background: linear-gradient(to bottom, #d1a535 0%, #fff 30%, #9e7314 100%);
-        border-radius: 8px;
-        box-shadow: 3px 0 6px rgba(0,0,0,0.15);
-    }
-    .scroll-rod::before { left: -8px; }
-    .scroll-rod::after { right: -8px; box-shadow: -3px 0 6px rgba(0,0,0,0.15); }
-
-    .bottom-rod {
-        transition: transform 3s cubic-bezier(0.34, 1.05, 0.64, 1);
-        transform-origin: center;
-    }
-
-
-    /* --- THE CLICK HINT --- */
-    .click-hint {
-        position: absolute;
-        bottom: -40px;
+    .envelope-text h3 {
         font-family: 'Outfit', sans-serif;
-        font-size: 0.9rem;
-        font-weight: 600;
+        font-size: 1.1rem;
         color: #ff6b81;
-        letter-spacing: 2px;
+        letter-spacing: 3px;
         text-transform: uppercase;
-        animation: pulseHint 2s infinite ease-in-out;
-        transition: opacity 0.5s ease;
-        pointer-events: none;
+        margin-bottom: 5px;
     }
 
-    @keyframes pulseHint {
-        0%, 100% { transform: translateY(0); opacity: 0.6; }
-        50% { transform: translateY(5px); opacity: 1; }
+    .envelope-text h1 {
+        font-family: 'Alex Brush', cursive;
+        font-size: 4.5rem;
+        color: #ff4757;
+        line-height: 1;
     }
 
-
-    /* --- THE PAPER & MASK --- */
-    .scroll-mask {
-        width: 100%;
-        height: 0px; 
-        overflow: hidden;
-        position: relative;
-        transition: height 3s cubic-bezier(0.34, 1.05, 0.64, 1);
-    }
-
-    .scroll-mask::after {
-        content: "";
+    .wax-seal {
         position: absolute;
-        bottom: 0; left: 0; width: 100%; height: 30px;
-        background: linear-gradient(to bottom, transparent 0%, rgba(255, 107, 129, 0.1) 100%);
-        pointer-events: none;
-        z-index: 3;
+        bottom: 35px;
+        width: 60px; height: 60px;
+        background: radial-gradient(circle, #ff4757 0%, #d63031 100%);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 1.5rem;
+        box-shadow: 0 5px 15px rgba(214, 48, 49, 0.4);
+        z-index: 6;
+        transition: transform 0.3s ease;
     }
 
-    .scroll-paper {
+    .envelope-wrapper:hover .wax-seal {
+        transform: scale(1.1);
+    }
+
+    /* --- THE LETTER SHEET (Hidden initially) --- */
+    .letter-sheet {
+        grid-column: 1;
+        grid-row: 1;
         width: 100%;
-        background: rgba(255, 255, 255, 0.85); 
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-        border-left: 1px solid rgba(255, 255, 255, 0.8);
-        border-right: 1px solid rgba(255, 255, 255, 0.8);
-        padding: 4.5rem 5rem;
-        
-        box-shadow: inset 15px 0 25px rgba(255, 107, 129, 0.04), 
-                    inset -15px 0 25px rgba(255, 107, 129, 0.04);
+        max-width: 850px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 4rem 5rem;
+        border-radius: 30px;
+        border-top: 2px solid #ffffff;
+        border-left: 2px solid #ffffff;
+        box-shadow: 0 30px 60px rgba(255, 107, 129, 0.15), inset 0 0 30px rgba(255,255,255,1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        /* Hidden state: removed from layout entirely so it can't push page height */
+        display: none;
+        opacity: 0;
+        transform: translateY(60px) scale(0.95);
+        pointer-events: none;
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 10;
+        align-self: start;
     }
 
+    /* Active State (When opened) */
+    .letter-sheet.open {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+    }
 
-    /* --- TYPOGRAPHY --- */
+    .envelope-wrapper.hidden {
+        opacity: 0;
+        transform: translateY(-40px) scale(0.9);
+        pointer-events: none;
+    }
+
+    /* --- LETTER TYPOGRAPHY --- */
     .greeting {
         font-family: 'Outfit', sans-serif;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 600;
         color: #ff4757;
-        margin-bottom: 2rem;
+        margin-bottom: 2.5rem;
         letter-spacing: 1px;
     }
 
@@ -224,23 +221,23 @@
     .letter-body {
         font-family: 'Poppins', sans-serif;
         font-size: 1.1rem;
-        line-height: 1.8;
+        line-height: 1.9;
         color: #4a4a4a;
         font-weight: 400;
     }
 
-    .letter-body p { margin-bottom: 1.5rem; }
+    .letter-body p { margin-bottom: 1.8rem; }
 
     .highlight-quote {
+        background: linear-gradient(to right, rgba(255, 138, 154, 0.1), transparent);
+        border-left: 4px solid #ff4757;
+        padding: 1.5rem 2rem;
+        margin: 2.5rem 0;
+        border-radius: 0 20px 20px 0;
         font-family: 'Playfair Display', serif;
         font-style: italic;
-        font-size: 1.25rem;
-        color: #ff6b81;
-        text-align: center;
-        margin: 2.5rem 0;
-        padding: 0 2rem;
-        border-left: 3px solid #ff8a9a;
-        border-right: 3px solid #ff8a9a;
+        font-size: 1.15rem;
+        color: #d13c4a;
     }
 
     .hashtag {
@@ -248,7 +245,7 @@
         font-weight: 700;
         color: #ff8a9a;
         letter-spacing: 2px;
-        margin-top: 2rem;
+        margin-top: 2.5rem;
     }
 
     .signature {
@@ -257,7 +254,7 @@
     }
 
     .signature .yours {
-        font-size: 1rem;
+        font-size: 0.95rem;
         color: #8fa0ad;
         text-transform: uppercase;
         letter-spacing: 2px;
@@ -272,56 +269,34 @@
         text-shadow: 2px 2px 5px rgba(255, 71, 87, 0.1);
     }
 
-    /* --- PENDULUM SWING ANIMATION --- */
-    @keyframes dropAndSway {
-        0% { opacity: 0; transform: translateY(-50px) rotateZ(6deg); }
-        15% { opacity: 1; transform: translateY(0) rotateZ(-3deg); }
-        35% { transform: rotateZ(2deg); }
-        55% { transform: rotateZ(-1deg); }
-        75% { transform: rotateZ(0.5deg); }
-        100% { opacity: 1; transform: rotateZ(0deg); }
-    }
-
     /* --- THE NEXT BUTTON --- */
     .next-btn {
         position: fixed;
         bottom: 30px;
         right: 30px;
-        padding: 12px 28px;
-        background: rgba(255, 255, 255, 0.6);
+        padding: 14px 32px;
+        background: rgba(255, 255, 255, 0.75);
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(255, 255, 255, 1);
         border-radius: 50px;
         color: #ff4757;
         font-family: 'Outfit', sans-serif;
         font-weight: 700;
         font-size: 1.1rem;
         text-decoration: none;
-        box-shadow: 0 10px 25px rgba(255, 107, 129, 0.2);
+        box-shadow: 0 10px 25px rgba(255, 107, 129, 0.25);
         display: flex;
         align-items: center;
         gap: 8px;
-        
-        /* Starts hidden */
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(20px);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: all 0.3s ease;
         z-index: 100;
     }
 
-    /* Class added by JS to reveal it */
-    .next-btn.show {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
-
     .next-btn:hover {
-        background: rgba(255, 255, 255, 0.95);
+        background: #ffffff;
         transform: translateY(-4px);
-        box-shadow: 0 15px 30px rgba(255, 107, 129, 0.3);
+        box-shadow: 0 15px 30px rgba(255, 107, 129, 0.4);
         color: #ff3b4c;
     }
 
@@ -331,27 +306,26 @@
     }
 
     .next-btn:hover span {
-        transform: translateX(4px);
+        transform: translateX(5px);
     }
-
 
     /* Mobile Responsiveness */
     @media (max-width: 768px) {
         body { padding: 2rem 1rem 7rem 1rem; }
-        .hanging-cords { height: 60px; }
-        .scroll-rod { width: 106%; height: 28px; }
-        .scroll-paper { padding: 2.5rem 1.5rem; }
+        .envelope-wrapper { max-width: 90%; height: 280px; }
+        .envelope-flap { border-left: 175px solid transparent; border-right: 175px solid transparent; border-top: 130px solid #ffd1d6; }
+        .envelope-text h1 { font-size: 3.5rem; }
+        .letter-sheet { padding: 2.5rem 1.5rem; }
         .greeting { font-size: 1.2rem; }
         .greeting span { font-size: 3rem; }
         .letter-body { font-size: 1rem; line-height: 1.7; }
-        .highlight-quote { font-size: 1.1rem; padding: 0 1rem; margin: 1.5rem 0; }
+        .highlight-quote { padding: 1.2rem; margin: 1.5rem 0; font-size: 1.05rem; }
         .signature .name { font-size: 2.8rem; }
-        
-        /* Next button repositioned for mobile */
+
         .next-btn {
             bottom: 20px;
             right: 20px;
-            padding: 10px 22px;
+            padding: 12px 24px;
             font-size: 1rem;
         }
     }
@@ -359,117 +333,86 @@
 </head>
 <body>
 
-<!-- Light Ethereal Background + Particles -->
+<!-- Scrapbook Background Atmosphere -->
 <div class="bg-aurora"></div>
-<div class="particles"></div>
+<div class="paper-texture"></div>
 
-<div class="scroll-wrapper" id="letterScroll">
-    
-    <!-- The Nail -->
-    <div class="nail"></div>
+<!-- Background Faded Memories -->
+<img src="/static/images/GroupPhoto.png" class="bg-memory bg-1" alt="">
+<img src="/static/images/AfterCelebration.png" class="bg-memory bg-2" alt="">
+<img src="/static/images/FirstCelebration.png" class="bg-memory bg-3" alt="">
 
-    <!-- Scalable Vector Cords -->
-    <svg class="hanging-cords" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <path d="M50 0 L1 100 M50 0 L99 100" stroke="#d1a535" stroke-width="2" vector-effect="non-scaling-stroke" fill="none" />
-    </svg>
+<div class="stage">
 
-    <div class="scroll-content-group">
-        <!-- Top Rod -->
-        <div class="scroll-rod"></div>
-
-        <!-- The Mask that hides the paper -->
-        <div class="scroll-mask" id="scrollMask">
-            
-            <!-- The Paper with content -->
-            <div class="scroll-paper" id="scrollPaper">
-                
-                <div class="greeting">
-                    Happiest birthday to my dear <span>Chhutki...</span>
-                </div>
-
-                <div class="letter-body">
-                    <p>Haa pta h mujhe, mere kuch time ke behaviour se tujhe ye baat jhooth lag rhi hogi. But shi me, a very very very very happy birthday to you.</p>
-
-                    <p>Tu janti to h hi mujhe. Jitna meri life me kya chal rha h tu janti h, utna to shayad hi koi or janta ho. You know every aspect of my situation. Me krna nhi chahta, wesa behave apne aap krne lag gya hu, or me dil se maafi chahta hu. Chahta hu tu mujhe maaf kre, me dil se chahta hu ki me tujhko maaf krdu, or in sab cheezo se aage badh kr khud bhi khush rahu or tujhe khush krne ke liye bhi sab kuch kar paau jesa me aaj tk krta aaya hu. And I promise you I will try my best.</p>
-
-                    <p>Yaad h pichli baar wala letter? Kuch waade kiye the mene unme, pr bhagwan se kuch maanga bhi tha tere liye...</p>
-
-                    <div class="highlight-quote">
-                        "May God remove every obstacle that obstructs you, be it me."
-                    </div>
-
-                    <p>And I believe shayad isiliye ham dono ke beech ki dooriyan badh gyi h. But I promise you one more thing today: I will try my best to not be that obstacle and be a staircase for you to climb upon to the wishes of your life.</p>
-
-                    <p>Bhot kuch kiya tune mere liye bhi, kuch cheeze kar nhi paayi. Par mene un kuch cheezo ke liye tujhe zaroorat se bhot jada suna diya or bhot baar. Me iske liye tujhse maafi maangna chahta hu or abhi mangta bhi hu. And I promise you from today onwards I will never speak in such manner. If I am ever angry on you, I will take a break, gather my calm, and then will come talk to you.</p>
-
-                    <p>Please let go of everything bad that has happened between us, and with me contribute to those huge collection of memories that we uphold together as one of the best memories of our life.</p>
-
-                    <p>Tune mujhko mana kar diya gift dene ke liye, kaha to enjoy nhi kr paati. To isiliye mene is baari ye cheez tujhe dene ke liye socha. Ye website hamari bhot sari memories ko mene sanjo kr banayi h. I really hope tujhko pasand aaygi or tera ye birthday bhi yaadgaar hoga.</p>
-
-                    <p>Or me chahta hu tera ye saal pichle saal se bilkul hatke rahe, sab bhot achha ho, or ham log khub sari memories banaye sath me. Once again, a Very Very Very Happy Birthday To My Dear Chhutki.</p>
-
-                    <div class="hashtag"># SAC</div>
-                </div>
-
-                <div class="signature">
-                    <span class="yours">From Yours,</span><br>
-                    <span class="name">Phunsukh Wangdu</span>
-                </div>
-
-            </div>
+    <!-- VINTAGE ENVELOPE -->
+    <div class="envelope-wrapper" id="envelopeBtn">
+        <div class="envelope-flap"></div>
+        <div class="envelope-text">
+            <h3>A Special Note For</h3>
+            <h1>Chhutki</h1>
         </div>
-
-        <!-- Bottom Rod -->
-        <div class="scroll-rod bottom-rod" id="bottomRod">
-            <!-- Click hint anchored to the bottom rod -->
-            <div class="click-hint" id="clickHint">Click to unroll</div>
-        </div>
+        <div class="wax-seal">✉️</div>
     </div>
+
+    <!-- THE LETTER SHEET -->
+    <div class="letter-sheet" id="letterSheet">
+
+        <div class="greeting">
+            Happiest birthday to my dear <span>Chhutki...</span>
+        </div>
+
+        <div class="letter-body">
+            <p>Haa pta h mujhe, mere kuch time ke behaviour se tujhe ye baat jhooth lag rhi hogi. But shi me, a very very very very happy birthday to you.</p>
+
+            <p>Tu janti to h hi mujhe. Jitna meri life me kya chal rha h tu janti h, utna to shayad hi koi or janta ho. You know every aspect of my situation. Me krna nhi chahta, wesa behave apne aap krne lag gya hu, or me dil se maafi chahta hu. Chahta hu tu mujhe maaf kre, me dil se chahta hu ki me tujhko maaf krdu, or in sab cheezo se aage badh kr khud bhi khush rahu or tujhe khush krne ke liye bhi sab kuch kar paau jesa me aaj tk krta aaya hu. And I promise you I will try my best.</p>
+
+            <p>Yaad h pichli baar wala letter? Kuch waade kiye the mene unme, pr bhagwan se kuch maanga bhi tha tere liye...</p>
+
+            <div class="highlight-quote">
+                "May God remove every obstacle that obstructs you, be it me."
+            </div>
+
+            <p>And I believe shayad isiliye ham dono ke beech ki dooriyan badh gyi h. But I promise you one more thing today: I will try my best to not be that obstacle and be a staircase for you to climb upon to the wishes of your life.</p>
+
+            <p>Bhot kuch kiya tune mere liye bhi, kuch cheeze kar nhi paayi. Par mene un kuch cheezo ke liye tujhe zaroorat se bhot jada suna diya or bhot baar. Me iske liye tujhse maafi maangna chahta hu or abhi mangta bhi hu. And I promise you from today onwards I will never speak in such manner. If I am ever angry on you, I will take a break, gather my calm, and then will come talk to you.</p>
+
+            <p>Please let go of everything bad that has happened between us, and with me contribute to those huge collection of memories that we uphold together as one of the best memories of our life.</p>
+
+            <p>Tune mujhko mana kar diya gift dene ke liye, kaha to enjoy nhi kr paati. To isiliye mene is baari ye cheez tujhe dene ke liye socha. Ye website hamari bhot sari memories ko mene sanjo kr banayi h. I really hope tujhko pasand aaygi or tera ye birthday bhi yaadgaar hoga.</p>
+
+            <p>Or me chahta hu tera ye saal pichle saal se bilkul hatke rahe, sab bhot achha ho, or ham log khub sari memories banaye sath me. Once again, a Very Very Very Happy Birthday To My Dear Chhutki.</p>
+
+            <div class="hashtag"># SAC</div>
+        </div>
+
+        <div class="signature">
+            <span class="yours">From Yours,</span><br>
+            <span class="name">Phunsukh Wangdu</span>
+        </div>
+
+    </div>
+
 </div>
 
-<!-- The Floating Next Button (Target link can be changed in the href attribute) -->
-<a href="/20thBirthday" class="next-btn" id="nextBtn">
+<!-- The Floating Next Button -->
+<a href="/20thBirthday" class="next-btn">
     Next <span>➔</span>
 </a>
 
 <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const wrapper = document.getElementById('letterScroll');
-        const scrollMask = document.getElementById('scrollMask');
-        const scrollPaper = document.getElementById('scrollPaper');
-        const bottomRod = document.getElementById('bottomRod');
-        const clickHint = document.getElementById('clickHint');
-        const nextBtn = document.getElementById('nextBtn');
-        
-        let isOpened = false;
+    const envelopeBtn = document.getElementById('envelopeBtn');
+    const letterSheet = document.getElementById('letterSheet');
 
-        // 1. Drop into the scene on load
+    envelopeBtn.addEventListener('click', () => {
+        envelopeBtn.classList.add('hidden');
+        letterSheet.style.display = 'block';
+        document.body.classList.add('letter-open');
+        // Force a reflow so the browser registers the display change
+        // before we animate opacity/transform, otherwise the transition gets skipped.
+        void letterSheet.offsetHeight;
         setTimeout(() => {
-            wrapper.classList.add('swing');
-        }, 300); 
-
-        // 2. Unroll logic on click
-        wrapper.addEventListener('click', () => {
-            if (isOpened) return; // Prevent multiple clicks
-            isOpened = true;
-
-            // Remove pointer cursor and hint
-            wrapper.style.cursor = 'default';
-            clickHint.style.opacity = '0';
-
-            // Calculate height
-            const paperHeight = scrollPaper.scrollHeight;
-            scrollMask.style.height = paperHeight + 'px';
-
-            // Calculate exact rotations for the bottom rod (Circumference = Pi * 32)
-            const rotations = paperHeight / (Math.PI * 32);
-            bottomRod.style.transform = `rotateX(-${rotations * 360}deg)`;
-
-            // 3. Reveal the "Next" button smoothly after the scroll finishes unrolling (approx 3 seconds)
-            setTimeout(() => {
-                nextBtn.classList.add('show');
-            }, 3000);
-        });
+            letterSheet.classList.add('open');
+        }, 300); // Slight delay for smooth transition
     });
 </script>
 

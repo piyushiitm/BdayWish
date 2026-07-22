@@ -1,9 +1,520 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Teen Khtm krne wala Bday! 😭</title>
-    </head>
-    <body>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teen Khtm Krne Wala Bday! 😭</title>
 
-    </body>
+<!-- High-End Premium Typography -->
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Outfit:wght@400;600;700&family=Playfair+Display:ital,wght@1,600&family=Poppins:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #fdfaf6; 
+        font-family: 'Poppins', sans-serif;
+        overflow-x: hidden;
+        color: #3b3b3b;
+    }
+
+    /* --- THE DREAMY BACKGROUND --- */
+    .bg-aurora {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        z-index: -3;
+        background: radial-gradient(circle at 15% 50%, rgba(255, 182, 193, 0.4) 0%, transparent 60%),
+                    radial-gradient(circle at 85% 30%, rgba(255, 218, 185, 0.5) 0%, transparent 60%),
+                    radial-gradient(circle at 50% 80%, rgba(255, 192, 203, 0.3) 0%, transparent 60%);
+        filter: blur(40px); 
+    }
+
+    .paper-texture {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        z-index: -2;
+        pointer-events: none;
+    }
+
+    /* Background Faded Memories */
+    .bg-memory {
+        position: fixed;
+        z-index: -1;
+        opacity: 0.15;
+        filter: blur(4px); 
+        border-radius: 20px;
+        pointer-events: none;
+    }
+    
+    .bg-1 { top: 50%; left: -15%; width: 650px; transform: translateY(-50%) rotate(-12deg); }
+    .bg-2 { bottom: 10%; right: -10%; width: 500px; transform: rotate(20deg); }
+    .bg-3 { top: 40%; right: 5%; width: 300px; transform: rotate(-10deg); }
+
+    /* --- SCRAPBOOK CONTAINER --- */
+    .scrapbook {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 5rem 2rem 10rem 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 6rem;
+    }
+
+    /* --- THE HEADER --- */
+    .scrapbook-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        animation: fadeUp 1.2s ease forwards;
+    }
+    .scrapbook-title h1 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #ff8a9a;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
+    .scrapbook-title h2 {
+        font-family: 'Alex Brush', cursive;
+        font-size: 4.5rem;
+        color: #ff4757;
+        line-height: 1.1;
+        text-shadow: 2px 4px 15px rgba(255, 71, 87, 0.2);
+    }
+
+    /* --- LAYOUT ROWS --- */
+    .scrapbook-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+    }
+    .row-reverse { flex-direction: row-reverse; }
+
+    .text-only-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        margin: 2rem 0;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* --- THE JOURNAL NOTES --- */
+    .journal-note {
+        width: 48%;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 3rem;
+        border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+        box-shadow: 2px 5px 20px rgba(0,0,0,0.05), inset 0 0 50px rgba(255, 182, 193, 0.1);
+        border: 1px solid rgba(255,255,255,0.8);
+        position: relative;
+        z-index: 2;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        transform: rotate(-1deg);
+        transition: transform 0.3s ease;
+    }
+    .journal-note:hover { transform: rotate(0deg) scale(1.02); }
+    .journal-note p { margin-bottom: 1rem; }
+    .journal-note p:last-child { margin-bottom: 0; }
+
+    .journal-note::before {
+        content: "";
+        position: absolute;
+        top: -15px; left: 50%;
+        transform: translateX(-50%) rotate(2deg);
+        width: 120px; height: 35px;
+        background: rgba(255, 182, 193, 0.4);
+        border-radius: 2px;
+        backdrop-filter: blur(4px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    /* --- CLUSTERED POLAROID GROUP --- */
+    .polaroid-group {
+        width: 50%;
+        position: relative;
+        height: 500px;
+    }
+    
+    .polaroid-group .p1 {
+        position: absolute;
+        top: 0; left: 5%;
+        width: 65%;
+        transform: rotate(-6deg);
+        z-index: 5; 
+    }
+    
+    .polaroid-group .p2 {
+        position: absolute;
+        bottom: 0; right: 5%;
+        width: 65%;
+        transform: rotate(8deg);
+        z-index: 2; 
+    }
+
+    /* --- THE POLAROIDS --- */
+    .polaroid {
+        width: 45%;
+        background: #ffffff;
+        padding: 1rem 1rem 4.5rem 1rem;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.1);
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    /* Interactive cursor for video polaroids */
+    .polaroid:has(video) {
+        cursor: pointer;
+    }
+
+    .polaroid img, .polaroid video {
+        width: 100%;
+        aspect-ratio: 1 / 1.05; 
+        object-fit: cover; 
+        border-radius: 4px;
+        background: #f4f4f4; 
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        transform: translateZ(0);
+        will-change: transform;
+    }
+    
+    .polaroid img.no-crop {
+        aspect-ratio: auto;
+        object-fit: contain;
+    }
+
+    .scrapbook-row .single-polaroid { margin-left: -5%; transform: rotate(4deg); z-index: 3;}
+    .scrapbook-row.row-reverse .single-polaroid { margin-right: -5%; margin-left: 0; transform: rotate(-5deg); z-index: 3;}
+
+    .polaroid:hover {
+        transform: rotate(0deg) scale(1.05) !important;
+        z-index: 20 !important;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    }
+
+    .polaroid::after {
+        content: "";
+        position: absolute;
+        top: -12px; left: 50%;
+        transform: translateX(-50%) rotate(-3deg);
+        width: 90px; height: 28px;
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .polaroid-caption {
+        position: absolute;
+        bottom: 18px;
+        width: 100%;
+        text-align: center;
+        left: 0;
+        font-family: 'Caveat', cursive;
+        font-size: 1.8rem;
+        color: #555;
+    }
+
+    /* --- THE HIGHLIGHT QUOTE --- */
+    .quote-block {
+        width: 100%;
+        text-align: center;
+        padding: 4rem;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+        position: relative;
+    }
+    .quote-block p {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 1.6rem;
+        color: #d13c4a;
+        line-height: 1.6;
+        position: relative;
+        z-index: 2;
+    }
+    .quote-block::before {
+        content: "“";
+        position: absolute;
+        top: 0; left: 50%;
+        transform: translateX(-50%);
+        font-family: 'Playfair Display', serif;
+        font-size: 8rem;
+        color: rgba(255, 71, 87, 0.1);
+        line-height: 1;
+        z-index: 1;
+    }
+
+    /* --- FINAL COLLAGE SECTION --- */
+    .collage-row {
+        position: relative;
+        height: 550px; 
+        width: 100%;
+        margin-top: 2rem;
+    }
+    
+    .collage-polaroid-1 {
+        width: 45%;
+        position: absolute;
+        left: 20%;
+        transform: rotate(-6deg);
+        z-index: 2;
+    }
+    
+    .collage-polaroid-2 {
+        width: 42%;
+        position: absolute;
+        right: 25%;
+        top: 25%;
+        transform: rotate(5deg);
+        z-index: 5; 
+    }
+
+    /* --- NEXT PAGE BUTTON --- */
+    .next-page-btn {
+        position: fixed;
+        bottom: 30px; right: 30px;
+        padding: 14px 32px;
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 2px solid rgba(255, 255, 255, 1);
+        border-radius: 50px;
+        color: #ff4757;
+        font-family: 'Outfit', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-decoration: none;
+        box-shadow: 0 10px 25px rgba(255, 107, 129, 0.25);
+        display: flex; align-items: center; gap: 8px;
+        transition: all 0.3s ease; z-index: 100;
+    }
+    .next-page-btn:hover {
+        background: #ffffff;
+        transform: translateY(-4px);
+        box-shadow: 0 15px 30px rgba(255, 107, 129, 0.4);
+    }
+    .next-page-btn span { transition: transform 0.3s ease; }
+    .next-page-btn:hover span { transform: translateX(5px); }
+
+    /* Animations */
+    @keyframes fadeUp {
+        0% { transform: translateY(40px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+    .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .animate-on-scroll.visible {
+        opacity: 1; transform: translateY(0);
+    }
+
+    /* --- MOBILE RESPONSIVENESS --- */
+    @media (max-width: 768px) {
+        .scrapbook { padding: 3rem 1.5rem 8rem 1.5rem; gap: 4rem; }
+        .scrapbook-title h2 { font-size: 3.2rem; }
+        
+        .scrapbook-row, .scrapbook-row.row-reverse, .text-only-section {
+            flex-direction: column; gap: 2rem;
+        }
+        
+        .journal-note, .polaroid, .polaroid-group { width: 100%; margin: 0 !important; }
+        
+        .polaroid-group { height: auto; display: flex; flex-direction: column; gap: 2rem; }
+        .polaroid-group .p1, .polaroid-group .p2 { position: static; width: 100%; }
+        
+        .polaroid { transform: rotate(2deg) !important; padding: 1rem 1rem 3rem 1rem; }
+        .polaroid:hover { transform: rotate(0deg) scale(1.02) !important; z-index: 20 !important; }
+        
+        .quote-block { padding: 2rem 1rem; }
+        .quote-block p { font-size: 1.3rem; }
+        
+        .collage-row { height: auto; flex-direction: column; gap: 2rem; margin-top: 4rem; }
+        .collage-polaroid-1, .collage-polaroid-2 { 
+            position: static; width: 100%; transform: rotate(0); 
+        }
+        
+        .next-page-btn { bottom: 20px; right: 20px; padding: 12px 24px; font-size: 1rem; }
+    }
+</style>
+</head>
+<body>
+
+<!-- Atmosphere Elements -->
+<div class="bg-aurora"></div>
+<div class="paper-texture"></div>
+
+<!-- Background Faded Memories -->
+<img src="/static/images/GroupPhoto.png" class="bg-memory bg-1" alt="">
+<img src="/static/images/AfterCelebration.png" class="bg-memory bg-2" alt="">
+<img src="/static/images/FirstCelebration.png" class="bg-memory bg-3" alt="">
+
+<div class="scrapbook">
+    
+    <!-- HEADER -->
+    <div class="scrapbook-title">
+        <h1>Memories from the past year</h1>
+        <h2>Teen Khtm Krne Wala Bday! 😭</h2>
+    </div>
+
+    <!-- ROW 1: Note 1 + Clustered Photos (First Cut & Bday Vibes) -->
+    <div class="scrapbook-row animate-on-scroll">
+        <div class="journal-note">
+            <p>Yaad h tere pichle bday ke liye mene kya kya plan banaye the par kuch ho nhi paya tha. Jiski wajah se mene apna dimaag khrab kr rkha tha, but still wo din itna achha gya. Yaad h kya or kese hua tha?</p>
+            <p>Yaad kr kese tu yhi bolne me lagi thi ki mere teen khtm hogye. Haa, tere teen to khtm hogye the us din, but tu mere liye meri whi chhutki rahegi. Yaad h tujhe wish kese kiya tha? Aaj bhi wese hi karunga, lekin is message ke pura hone ke baad.</p>
+        </div>
+        
+        <div class="polaroid-group">
+            <div class="polaroid p1">
+                <img src="/static/images/FirstCelebration.png" alt="First Celebration">
+                <div class="polaroid-caption">First Cut 🎂</div>
+            </div>
+            
+            <div class="polaroid p2">
+                <video class="scrapbook-video" src="/static/images/FirstCelebration.mov" loop playsinline preload="auto"></video>
+                <div class="polaroid-caption">Birthday Vibes ✨</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: Note 2 + Highlight Quote (Text Only) -->
+    <div class="text-only-section animate-on-scroll">
+        <div class="journal-note" style="width: 80%; transform: rotate(1.5deg);">
+            <p>Wese to tujhe sab kuch yaad hi hoga, but ek aad aisi cheeze thi jo tu shayad bhul gyi ho kyunki bhot choti choti thi, but majedaar thi jinke hone se achha lga sbko.</p>
+        </div>
+        
+        <div class="quote-block">
+            <p>“Yaad h kese hm sab cake se holi khelne me lage the pr ek tha jo ekdum hi mana kr rha tha cake lagwane se. Haa samanth hi tha wo. Fir yaad h tujhe use kese cake lagaya tha mene? Use dekh kr tu hasi bhot thi... teri wo hasi dhyaan aati h to mann hi mann bhot achha lgta h mujhe.”</p>
+        </div>
+    </div>
+
+    <!-- ROW 3: Note 3 + Best One Photo -->
+    <div class="scrapbook-row row-reverse animate-on-scroll">
+        <div class="journal-note" style="transform: rotate(-1deg);">
+            <p>Or bhi kuch cheeze hui thi. Yaad kr us din mujhe kisine bday wish kiya tha! Yaad kr jab tune aarti se bola ki wo photo kheech le ham sab logo ki, tab usne photos lene ke baad <strong>mujhe</strong> happy birthday wish kiya tha. Alag hi awkward situation thi wo 😂. Par usne ye photo sbse pyaari li, jo tu mujhe de nhi rhi thi 😠.</p>
+        </div>
+        <div class="polaroid single-polaroid" style="width: 50%;">
+            <img class="no-crop" src="/static/images/GroupPhoto.png" alt="Group Photo">
+            <div class="polaroid-caption">Best One ❤️</div>
+        </div>
+    </div>
+
+    <!-- FINAL TEXT: Centered closing thought -->
+    <div class="animate-on-scroll" style="text-align: center; margin-top: 2rem;">
+        <div class="journal-note" style="width: 80%; margin: 0 auto; transform: rotate(0.5deg);">
+            <p style="text-align: center; font-size: 1.25rem;">Kuch bhi ho, kesa bhi rha ho, par wo din sach much me bhot achha gya. Hope so ye aaj ka din bhi tere liye usse kai guna achha jaye.</p>
+        </div>
+    </div>
+
+    <!-- FINAL COLLAGE PILE -->
+    <div class="collage-row animate-on-scroll">
+        
+        <div class="polaroid collage-polaroid-1">
+            <video class="scrapbook-video" src="/static/images/unboxing.mov" loop playsinline preload="auto"></video>
+            <div class="polaroid-caption">Surprise! 🎁</div>
+        </div>
+        
+        <div class="polaroid collage-polaroid-2">
+            <img src="/static/images/AfterCelebration.png" alt="Happy Faces">
+            <div class="polaroid-caption">Happy Faces 🥺</div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Floating Next Page Button -->
+<a href="nextpage.html" class="next-page-btn">
+    Next <span>➔</span>
+</a>
+
+<script>
+    // --- 1. Fade Up Animation on Scroll ---
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+    });
+
+    // --- 2. Smart Video Autoplay & Hidden Click-to-Play ---
+    const videos = document.querySelectorAll('.scrapbook-video');
+    let pendingVideos = new Set(); 
+
+    videos.forEach(video => {
+        video.volume = 0.6; // 60% Volume
+
+        // NEW: Hidden click-to-play feature on the polaroid frame
+        const polaroid = video.closest('.polaroid');
+        if (polaroid) {
+            polaroid.addEventListener('click', () => {
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+        }
+    });
+
+    const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const video = entry.target;
+            
+            if (entry.isIntersecting) {
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("Browser blocked autoplay. Waiting for user interaction.");
+                        pendingVideos.add(video); 
+                    });
+                }
+            } else {
+                video.pause();
+                pendingVideos.delete(video);
+            }
+        });
+    }, { threshold: 0.5 }); 
+
+    videos.forEach(video => {
+        videoObserver.observe(video);
+    });
+
+    // --- 3. Unlock Audio on First Scroll or Click ---
+    const unlockAudio = () => {
+        if (pendingVideos.size > 0) {
+            pendingVideos.forEach(video => {
+                video.play().catch(e => {}); 
+                pendingVideos.delete(video);
+            });
+        }
+    };
+
+    window.addEventListener('scroll', unlockAudio, { passive: true });
+    window.addEventListener('click', unlockAudio, { passive: true });
+    window.addEventListener('touchstart', unlockAudio, { passive: true });
+</script>
+
+</body>
 </html>
