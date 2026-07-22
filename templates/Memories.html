@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memories That We Hold</title>
+
+<!-- High-End Premium Typography -->
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Outfit:wght@400;600;700&family=Playfair+Display:ital,wght@1,600&family=Poppins:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #fdfaf6; 
+        font-family: 'Poppins', sans-serif;
+        overflow-x: hidden;
+        color: #3b3b3b;
+        position: relative;
+    }
+
+    /* --- THE DREAMY STATIC BACKGROUND --- */
+    .bg-aurora {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        z-index: -3;
+        background: radial-gradient(circle at 15% 50%, rgba(255, 182, 193, 0.4) 0%, transparent 60%),
+                    radial-gradient(circle at 85% 30%, rgba(255, 218, 185, 0.5) 0%, transparent 60%),
+                    radial-gradient(circle at 50% 80%, rgba(255, 192, 203, 0.3) 0%, transparent 60%);
+        filter: blur(40px); 
+        pointer-events: none;
+    }
+
+    .paper-texture {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        z-index: -2;
+        pointer-events: none;
+    }
+
+    /* Background Faded Memories */
+    .bg-memory {
+        position: fixed;
+        z-index: -1;
+        opacity: 0.15;
+        filter: blur(4px); 
+        border-radius: 20px;
+        pointer-events: none;
+    }
+    .bg-1 { top: 50%; left: -15%; width: 650px; transform: translateY(-50%) rotate(-12deg); }
+    .bg-2 { bottom: 10%; right: -10%; width: 500px; transform: rotate(20deg); }
+    .bg-3 { top: 40%; right: 5%; width: 300px; transform: rotate(-10deg); }
+
+    /* --- THE JOURNEY PATH (SVG Line weaving down the page) --- */
+    .journey-path-container {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    /* --- SCRAPBOOK CONTAINER --- */
+    .scrapbook {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 5rem 2rem 10rem 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 6rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* --- THE HEADER --- */
+    .scrapbook-title {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .scrapbook-title h1 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #ff8a9a;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
+    .scrapbook-title h2 {
+        font-family: 'Alex Brush', cursive;
+        font-size: 4.5rem;
+        color: #ff4757;
+        line-height: 1.1;
+        text-shadow: 2px 4px 15px rgba(255, 71, 87, 0.2);
+    }
+
+    /* --- LAYOUT ROWS --- */
+    .scrapbook-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+    }
+    .row-reverse { flex-direction: row-reverse; }
+
+    .text-only-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        margin: 2rem 0;
+        position: relative;
+    }
+
+    /* --- THE JOURNAL NOTES --- */
+    .journal-note {
+        width: 48%;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 3rem;
+        border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+        box-shadow: 2px 5px 20px rgba(0,0,0,0.05), inset 0 0 50px rgba(255, 182, 193, 0.1);
+        border: 1px solid rgba(255,255,255,0.8);
+        position: relative;
+        z-index: 2;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        transform: rotate(-1deg);
+        transition: transform 0.3s ease;
+    }
+    .journal-note:hover { transform: rotate(0deg) scale(1.02); }
+    .journal-note p { margin-bottom: 1rem; }
+    .journal-note p:last-child { margin-bottom: 0; }
+
+    .journal-note::before {
+        content: "";
+        position: absolute;
+        top: -15px; left: 50%;
+        transform: translateX(-50%) rotate(2deg);
+        width: 120px; height: 35px;
+        background: rgba(255, 182, 193, 0.4);
+        border-radius: 2px;
+        backdrop-filter: blur(4px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    /* --- CLUSTERED POLAROID GROUP --- */
+    .polaroid-group {
+        width: 50%;
+        position: relative;
+        height: 500px;
+    }
+    
+    .polaroid-group .p1 {
+        position: absolute;
+        top: 0; left: 5%;
+        width: 65%;
+        transform: rotate(-6deg);
+        z-index: 5; 
+    }
+    
+    .polaroid-group .p2 {
+        position: absolute;
+        bottom: 0; right: 5%;
+        width: 65%;
+        transform: rotate(8deg);
+        z-index: 2; 
+    }
+
+    /* --- CUSTOM ADJUSTMENTS --- */
+    .dj-night-img {
+        object-position: center 30% !important; 
+    }
+
+    .ajmer-crop {
+        object-fit: cover !important;
+        object-position: center 35% !important;
+    }
+
+    /* --- THE POLAROIDS --- */
+    .polaroid {
+        width: 45%;
+        background: #ffffff;
+        padding: 1rem 1rem 4.5rem 1rem;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.1);
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .polaroid:has(video) {
+        cursor: pointer;
+    }
+
+    .polaroid img, .polaroid video {
+        width: 100%;
+        aspect-ratio: 1 / 1.05; 
+        object-fit: cover; 
+        border-radius: 4px;
+        background: #f4f4f4; 
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        transform: translateZ(0);
+        will-change: transform;
+    }
+    
+    .polaroid img.no-crop {
+        aspect-ratio: auto;
+        object-fit: contain;
+    }
+
+    .scrapbook-row .single-polaroid { margin-left: -5%; transform: rotate(4deg); z-index: 3;}
+    .scrapbook-row.row-reverse .single-polaroid { margin-right: -5%; margin-left: 0; transform: rotate(-5deg); z-index: 3;}
+
+    .polaroid:hover {
+        transform: rotate(0deg) scale(1.05) !important;
+        z-index: 20 !important;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    }
+
+    .polaroid::after {
+        content: "";
+        position: absolute;
+        top: -12px; left: 50%;
+        transform: translateX(-50%) rotate(-3deg);
+        width: 90px; height: 28px;
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .polaroid-caption {
+        position: absolute;
+        bottom: 18px;
+        width: 100%;
+        text-align: center;
+        left: 0;
+        font-family: 'Caveat', cursive;
+        font-size: 1.8rem;
+        color: #555;
+    }
+
+    /* --- NEXT PAGE BUTTON --- */
+    .next-page-btn {
+        position: fixed;
+        bottom: 30px; right: 30px;
+        padding: 14px 32px;
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 2px solid rgba(255, 255, 255, 1);
+        border-radius: 50px;
+        color: #ff4757;
+        font-family: 'Outfit', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-decoration: none;
+        box-shadow: 0 10px 25px rgba(255, 107, 129, 0.25);
+        display: flex; align-items: center; gap: 8px;
+        transition: all 0.3s ease; z-index: 100;
+    }
+    .next-page-btn:hover {
+        background: #ffffff;
+        transform: translateY(-4px);
+        box-shadow: 0 15px 30px rgba(255, 107, 129, 0.4);
+    }
+    .next-page-btn span { transition: transform 0.3s ease; }
+    .next-page-btn:hover span { transform: translateX(5px); }
+
+    /* --- MOBILE RESPONSIVENESS --- */
+    @media (max-width: 768px) {
+        .scrapbook { padding: 3rem 1.5rem 8rem 1.5rem; gap: 4rem; }
+        .scrapbook-title h2 { font-size: 3.2rem; }
+        
+        .scrapbook-row, .scrapbook-row.row-reverse, .text-only-section {
+            flex-direction: column; gap: 2rem;
+        }
+        
+        .journal-note, .polaroid, .polaroid-group { width: 100%; margin: 0 !important; }
+        
+        .polaroid-group { height: auto; display: flex; flex-direction: column; gap: 2rem; }
+        .polaroid-group .p1, .polaroid-group .p2 { position: static; width: 100%; }
+        
+        .polaroid { transform: rotate(2deg) !important; padding: 1rem 1rem 3rem 1rem; }
+        .polaroid:hover { transform: rotate(0deg) scale(1.02) !important; z-index: 20 !important; }
+        
+        .next-page-btn { bottom: 20px; right: 20px; padding: 12px 24px; font-size: 1rem; }
+        .journey-path-container { display: none; } /* Hide path on very small screens for cleanliness */
+    }
+</style>
+</head>
+<body>
+
+<!-- Static Atmosphere Elements -->
+<div class="bg-aurora"></div>
+<div class="paper-texture"></div>
+
+<!-- Background Journey Path SVG Line -->
+<div class="journey-path-container">
+    <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 1000 3500">
+        <path d="M 500 50 Q 200 400 500 800 T 500 1600 T 500 2400 T 500 3200" 
+              fill="none" 
+              stroke="#ff8a9a" 
+              stroke-width="4" 
+              stroke-dasharray="10 10" 
+              opacity="0.35"/>
+    </svg>
+</div>
+
+<!-- Static Background Faded Memories -->
+<img src="static/images/GroupPhoto.png" class="bg-memory bg-1" alt="">
+<img src="static/images/AfterCelebration.png" class="bg-memory bg-2" alt="">
+<img src="static/images/FirstCelebration.png" class="bg-memory bg-3" alt="">
+
+<div class="scrapbook">
+    
+    <!-- HEADER -->
+    <div class="scrapbook-title">
+        <h1>A Journey Through Time</h1>
+        <h2>Memories That We Hold</h2>
+    </div>
+
+    <!-- SECTION 1: Intro + BEEE Copy Photo -->
+    <div class="scrapbook-row">
+        <div class="journal-note">
+            <p>Chal shuru se shuru karte hain. Yha tujhe wo sari cheeze milengi jo hamdono ne sath me enjoy kari.</p>
+            <p>Me ek din LNCT me admission le leta hu or is college se bhot hatash, nirash rhta hu par ek din ek ldki mujhse meri BEEE ki copy mangti h. Yaad h mene kya kha tha wo copy dete time le to tu jaa rhi h lekin kuch samjh aajaye isme to badi baat h. Aaya tha samajh? fir aage jo hua wo ham dono jante hi h phle dost dost se achhe dost fir bestfriends or ab tu chhutki me wangdu ban chuka. Bhale hi is journey me ham dono ne ladaiya kari but as you said we are Tom and Jerry we can fight but cannot stay away from each other.</p>
+        </div>
+        <div class="polaroid single-polaroid" style="width: 45%;">
+            <img class="no-crop" src="static/images/BEEE.jpg" alt="BEEE Copy">
+            <div class="polaroid-caption">First Interaction 📖</div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: Nicknames Journey (Text Only) -->
+    <div class="text-only-section">
+        <div class="journal-note" style="width: 80%; transform: rotate(1.5deg);">
+            <p>fir shuru hua tujhe khaniya sunane ka silsila mene khaniya sunai tujhe apni or tune mera naam unhi kahaniyo pr rkha. Yaad h tujhe phla nickname tune mujhe kya diya tha. Shayad yaad hi hoga but me fir bhi batata hu.</p>
+            <p>Yaad h me shuru me kese coffee khaya krta tha jagne ke liye phle tune mera naam coffee rkha.</p>
+            <p>Fir mene tujhe apni kota ki ek story batayi, jisme hm logo ne hamari maid se kha ki wo cheeni ke parathe bana de to usne cheeni or aate ko ghol ke cheele bana diye the. Isse tune mera naam rakh diya cheenikaparatha.</p>
+            <p>Isi ke baad aaya wo time jab mene tera naam Chhutki rkha tha. Or tu hi h meri chhutki or hamesha rahegi bhale hi me kuch bhi bolta rahu.</p>
+            <p>Fir Alexa kyunki me tera Alexa hua krta tha par ab nhi rha. Me waps se bnna chahta hu.</p>
+            <p>Fir khi na khi aage badhte badhte is safar me mera naam Wangdu ho gya. Kya me abhi bhi wangdu hu? Pta nhi par me rhna zaroor chahta hoon.</p>
+        </div>
+    </div>
+
+    <!-- SECTION 3: BEEE Sir & First Mela -->
+    <div class="scrapbook-row row-reverse">
+        <div class="journal-note" style="transform: rotate(-1deg);">
+            <p>Khair bhot hui ye senti baate chal ab tujhe kuch achhe kisse yaad dilata hu. Mujhe likhte time hasi aa rhi h to tujhe bhi dhyaan aayenge to ek smile to zaroor aayegi tere chere par.</p>
+            <p>Yaad h tujhe kese ek din BEEE wale sir gusse me the fir or class ko daant rhe the. Yaad h kya bola the last me unne. Abhi tk to already smile aagyi hogi at least i hope so. Yaad kr unne kese actions krte hue bola tha saadi phen ke nachu kya yha pr me. Funny to bhot tha wo.</p>
+            <p>Isi semester me ham log phli baar ghumne gye. Mujhe khushi bhot hui thi us din ki tune mujhe mela bulaya isi baat se meri khushi ka thikana nhi tha koi. Fir mele me tere sath jhoola jhoolke or bhi bhot jada achha laga. Its a memory too to uphold for this lifetime.</p>
+        </div>
+        <div class="journal-note" style="transform: rotate(1deg);">
+            <p>Fir sem ka last day aata h yaad h kya kya hua tha us din. Yaad kr me college late aaya tha 3rd period me or mujhe raste me samanth bhi mil gya fir hmdono canteen chale gye. Hmne pooja ko bhi bula liya or raste me hme tu bhi milgyi or fir hm chaaro sath holiye. Fir hmne thoda bhot kuch na kuch to kiya hi yaad nhi mujhe par maja bhot aaya tha us din. Or isike sath apna phle semester hasi majak thodi padhai ke sath khtm hogya.</p>
+        </div>
+    </div>
+
+    <!-- SECTION 4: Basant Panchami Photos -->
+    <div class="scrapbook-row">
+        <div class="journal-note">
+            <p>Fir aata a apna phla event sath me Basant Panchami. Yr us din patang udate to bani nhi par yr us din apan sab logo ne maje bhot kiye the sath me. Shi me wo din tha to bhot pyara. Fir yaad h tujhe us din ke last me wo jo ek patang thi jisko fekne se tu udaas hogyi thi use mene sambhal ke rkha use usko frame krke rkha 1 saal se jada sambhaal ke rkha lekin mere gusse me ek din wo bhi qurbaan hogyi. Me dil se maafi mangta hu us patang ke liye uski koi glti nhi thi. Me karunga puri koshish aajse apne gusse ko shant krne ki. Pinky Promise.</p>
+        </div>
+        <div class="polaroid-group">
+            <div class="polaroid p1">
+                <img src="static/images/basant.png" alt="Basant Panchami">
+                <div class="polaroid-caption">Basant Panchami 🪁</div>
+            </div>
+            <div class="polaroid p2">
+                <img src="static/images/patang.jpg" alt="Patang">
+                <div class="polaroid-caption">The Special Kite ✨</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 5: VIP Time -->
+    <div class="scrapbook-row row-reverse">
+        <div class="journal-note" style="transform: rotate(-1deg);">
+            <p>Fir ek baar hmlog vip ghumne gye the. Yr wo din bhi bhot pyaara tha jada kuch to nhi tha us din or na hi tb me photos me aata tha. But still ek photo h us din ki jisme tu mujhe ajeeb trah se dekh rhi h pta nhi kyu bhai. Par pta nhi kyu wo photo dekh kr mujhe hasi aati h.</p>
+        </div>
+        <div class="polaroid single-polaroid" style="width: 45%;">
+            <img class="no-crop" src="static/images/FirstTimeAtVIP.png" alt="VIP Time">
+            <div class="polaroid-caption">First Time at VIP 🌄</div>
+        </div>
+    </div>
+
+    <!-- SECTION 6: Akhil Sachdeva & DJ Night -->
+    <div class="scrapbook-row">
+        <div class="journal-note">
+            <p>Fir 2nd sem ke start me hi kuch events hote h jinme se ek to thik h so so hi tha. Haa whi DJ Night par dusre event me mja bhot aaya tha wakiye wo ek memory apne liye bhot sukoon bhari h. Wo concert akhil sachdeva jisme bas hm dono sath the sbse aage khade hue the or enjoy kar rhe the. Hope so tere liye bhi ye event wesi hi memory hold krta h jese ki mere liye.</p>
+        </div>
+        <div class="polaroid-group">
+            <div class="polaroid p1">
+                <img src="static/images/UsAtAkhil.png" alt="Akhil Sachdeva Concert">
+                <div class="polaroid-caption">Akhil Sachdeva 🎶</div>
+            </div>
+            <div class="polaroid p2">
+                <img class="dj-night-img" src="static/images/DJNight.png" alt="DJ Night">
+                <div class="polaroid-caption">DJ Night 💃</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 7: BCE Class & Ajmer Story -->
+    <div class="scrapbook-row row-reverse">
+        <div class="journal-note" style="transform: rotate(1deg);">
+            <p>Fir apan dono ne second sem me ek sath bethna chalu kr diya or isike sath masti bhot kari. Shi me wo phli baar tha mene ye sari masti kri ho wo shi me enjoy bhot kiya mene wo time. Yaad h ek din kese ham dono BCE ki class me kha rhe the. Ek din lad rhe the or maam ne ham dono ko data tha. Kese hmne us bench pr bethe bethe BME wale sir ka naam seeti rakh diya . Shi me mujhe wo pal apni aakhri saas tk yaad ayenge.</p>
+        </div>
+        <div class="polaroid single-polaroid" style="width: 45%;">
+            <img class="ajmer-crop" src="static/images/ajmer.png" alt="Ajmer Trip">
+            <div class="polaroid-caption">Ajmer Stories 🕌</div>
+        </div>
+    </div>
+
+    <!-- SECTION 8: More Sem 2 Memories (Kulfi & Sem 2 Last Days) -->
+    <div class="scrapbook-row">
+        <div class="journal-note">
+            <p>Ye baat ekdum second sem ke beech ki h. Yaad hoga tujhe me 2-3 din ke liye Pradyumn se milne Ajmer gya tha. Or usi time apne first midsem ke copies dikhayi thi. Me exam center ke bahr wait kr rha tha or tune mujhe tumhare yudh ki kahani batayi. Shi me yr wo sunne me hi mujhe bhot achha lag rha tha. Thanks a lot yr us din mere liye wo yuddh ladne ke liye.</p>
+            <p>Fir second sem me bhi hamne thode bhot bunk maare yr usme se ek photo h mere paas. Dekhni chhiye tujhe bhi ye photo. Or khi na khi is majak masti me apna 2nd semester bhi khtm hogya.</p>
+        </div>
+        <div class="polaroid-group">
+            <div class="polaroid p1">
+                <img src="static/images/Kulfi.png" alt="Kulfi Time">
+                <div class="polaroid-caption">Kulfi Moments 🍦</div>
+            </div>
+            <div class="polaroid p2">
+                <img src="static/images/S2LD.png" alt="Sem 2 Last Days">
+                <div class="polaroid-caption">Sem 2 Last Day ✨</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 9: Birthday & Scooty Learning -->
+    <div class="scrapbook-row row-reverse">
+        <div class="journal-note" style="transform: rotate(-1deg);">
+            <p>Fir iske baad me tera bday aaya or shi me tere bday ke din mene enjoy bhot kiya mujhe bhi achha bhot laga bhale hi kuch cheeze mere hisab se na ho paayi.Hope so tera ye birthday usse bhi achha jaye or aane wale sare bday har pichle bday se bhot achhe ho.</p>
+            <p>Fir iske baad jab written examps khtm hogye apne fir ham log ghumne gye. Us din bhi me udaas naraaz betha tha. Par fir bhi us din kuch cheeze aisi hui jinse mujhe khushi bhot mili. Yaad h ham log kese Kwality me chale gye the fir menu dekhke bhage the waha se. Ya fir kese ham log indrapuri me icecream ka family pack kharid ke kha rhe the. Par mere liye us din ki sbse sweet memory thi tujhe scooty chalana sikhana. Yaad h kese tune meri ungli apni choti choti undliyon se pkdi hui thi. Shi me wo din yr bhot payaara khtm hua. Me is time jab ye page bana rha hu mere chere pr ek alag hi smile h or mere aakhe bhi namm h.</p>
+        </div>
+        <div class="polaroid single-polaroid" style="width: 45%;">
+            <img class="no-crop" src="static/images/VIP.PNG" alt="VIP & Scooty">
+            <div class="polaroid-caption">Scooty Lessons 🛵</div>
+        </div>
+    </div>
+
+    <!-- SECTION 10: Third Sem & Navratri Devi -->
+    <div class="scrapbook-row">
+        <div class="journal-note">
+            <p>Fir shuru hota h third sem or yhi sem rha jo apni dosti ke liye bhot bhari rha. Bhot ladaiya hui hamari jo 4th sem bhi chalu hi rhi. But is sabke hote hue bhi hm log sath rhe. Or isi semester hamari phli navratri thi jo sath thi. Us din bhi me apna dimaag khrab krke beth gya tha. Par thanks to you yr me wo din,wo event bhi enjoy kar paaya. Really yr thanks to you. Yaad h kese us event me jab Sakshi ne tere upar ek bottle feki thi bhale hi majak masti me but mera hath apne aap uth gya tha usko rokne ke liye. I promise you aise hi me hamesha tere saamne aane wali sari musibato ke liye khada rahunga. Or fir kuch photoe li ham logo ne. Yaad h ye photo lene ke baad kya kaha tha tune mujhse "Isme to shi me devi hi bana diya tumne mujhe."</p>
+        </div>
+        <div class="polaroid single-polaroid" style="width: 45%;">
+            <img class="no-crop" src="static/images/Devi.png" alt="Navratri Devi">
+            <div class="polaroid-caption">Devi Look ❤️</div>
+        </div>
+    </div>
+
+    <!-- SECTION 11: Final Closing Note -->
+    <div class="text-only-section">
+        <div class="journal-note" style="width: 80%; transform: rotate(0.5deg);">
+            <p>Fir iske baad khaas to kuch hua nhi bas ek din mera bday aaya tha beech me. Haa us din me nirash, udaas bhot tha but still the way you wished me that was the sweetest birthday wish I had ever recieved. Thank you so much yr. And also sorry for being this rude and mean. I am really ashamed for the way I am behaving since that time. I am really sorry for it.</p>
+            <p style="text-align: center; font-size: 1.25rem; margin-top: 1.5rem; font-weight: 600; color: #ff4757;">Or ab hm yha aachuke h apni dosti me. Tera birthday h aaj to once again Happy Birthday to You!</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- Floating Next Page Button -->
+<a href="/BdayCelebration" class="next-page-btn">
+    Next <span>➔</span>
+</a>
+
+</body>
+</html>

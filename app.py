@@ -26,5 +26,13 @@ def message():
 @app.route("/20thBirthday")
 def lastbday():
     return render_template("LastBday.html")
+
+@app.route("/Memories")
+def mem():
+    return render_template("Memories.html")
+
+@app.route("/BdayCelebration")
+def celeb():
+    return render_template("Celebration.html")
 if __name__ == "__main__":
     app.run(debug=True)

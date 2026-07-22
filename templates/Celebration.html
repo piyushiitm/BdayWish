@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Celebrate 21</title>
+
+<!-- High-End Premium Typography -->
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Outfit:wght@400;600;700;800&family=Playfair+Display:ital,wght@1,600&family=Poppins:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+
+<!-- Confetti Script -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #fdfaf6; 
+        font-family: 'Poppins', sans-serif;
+        overflow-x: hidden;
+        padding: 3rem 1rem 7rem 1rem;
+        color: #3b3b3b;
+    }
+
+    /* --- STATIC DREAMY BACKGROUND --- */
+    .bg-aurora {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        z-index: -3;
+        background: radial-gradient(circle at 15% 50%, rgba(255, 182, 193, 0.4) 0%, transparent 60%),
+                    radial-gradient(circle at 85% 30%, rgba(255, 218, 185, 0.5) 0%, transparent 60%),
+                    radial-gradient(circle at 50% 80%, rgba(255, 192, 203, 0.3) 0%, transparent 60%);
+        filter: blur(40px);
+        pointer-events: none;
+    }
+
+    .paper-texture {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        z-index: -2;
+        pointer-events: none;
+    }
+
+    /* Background Faded Memories */
+    .bg-memory {
+        position: fixed;
+        z-index: -1;
+        opacity: 0.15;
+        filter: blur(4px); 
+        border-radius: 20px;
+        pointer-events: none;
+    }
+    .bg-1 { top: 50%; left: -15%; width: 650px; transform: translateY(-50%) rotate(-12deg); }
+    .bg-2 { bottom: 10%; right: -10%; width: 500px; transform: rotate(20deg); }
+    .bg-3 { top: 40%; right: 5%; width: 300px; transform: rotate(-10deg); }
+
+    /* --- CELEBRATION CONTAINER CARD --- */
+    .celebration-card {
+        width: 100%;
+        max-width: 650px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 3.5rem 3rem;
+        border-radius: 30px;
+        border-top: 2px solid #ffffff;
+        border-left: 2px solid #ffffff;
+        box-shadow: 0 30px 60px rgba(255, 107, 129, 0.15), inset 0 0 30px rgba(255,255,255,1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    /* Washi Tape Effect */
+    .celebration-card::before {
+        content: "";
+        position: absolute;
+        top: -15px; left: 50%;
+        transform: translateX(-50%) rotate(1deg);
+        width: 140px; height: 35px;
+        background: rgba(255, 182, 193, 0.4);
+        border-radius: 2px;
+        backdrop-filter: blur(4px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .title-area h1 {
+        font-family: 'Alex Brush', cursive;
+        font-size: 4.5rem;
+        color: #ff4757;
+        line-height: 1.1;
+    }
+
+    /* --- STUNNING SINGLE-LAYER STRAWBERRY / VANILLA CAKE --- */
+    .cake-container {
+        position: relative;
+        width: 280px;
+        height: 230px;
+        margin: 1.5rem auto 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .candle-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        margin-bottom: -6px;
+        z-index: 10;
+    }
+
+    .flame {
+        width: 16px;
+        height: 28px;
+        background: radial-gradient(circle at 50% 30%, #fff7ae 0%, #ff9f43 55%, #ff4757 100%);
+        border-radius: 50% 50% 20% 20%;
+        box-shadow: 0 0 15px rgba(255, 159, 67, 0.9), 0 0 30px rgba(255, 71, 87, 0.5);
+        animation: flicker 0.8s infinite alternate ease-in-out;
+        transform-origin: bottom center;
+        margin-bottom: 3px;
+        transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .flame.blow-reaction {
+        transform: skewX(-30deg) scaleY(0.6) scaleX(0.7) !important;
+        filter: brightness(1.4);
+    }
+
+    .flame.extinguished {
+        transform: scale(0) translateY(15px) rotate(15deg);
+        opacity: 0;
+        box-shadow: none;
+    }
+
+    @keyframes flicker {
+        0% { transform: scale(1) rotate(-3deg); }
+        100% { transform: scale(1.1) rotate(3deg); }
+    }
+
+    .candle-stick {
+        width: 16px;
+        height: 55px;
+        background: repeating-linear-gradient(45deg, #ff8a9a, #ff8a9a 8px, #fff 8px, #fff 16px);
+        border-radius: 4px;
+        position: relative;
+        box-shadow: inset -2px 0 5px rgba(0,0,0,0.15), 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    /* Single-Layer Cake Body */
+    .cake-layer {
+        width: 260px;
+        height: 100px;
+        background: linear-gradient(135deg, #ff9a9e 0%, #ff6b81 100%);
+        border-radius: 20px 20px 12px 12px;
+        box-shadow: 0 12px 30px rgba(255, 107, 129, 0.25), inset 0 -10px 15px rgba(0,0,0,0.1);
+        position: relative;
+        z-index: 4;
+    }
+
+    /* Smooth White Cream Frosting Top */
+    .cake-frosting-top {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 32px;
+        background: #ffffff;
+        border-radius: 20px 20px 8px 8px;
+        box-shadow: inset 0 -4px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Elegant Frosting Drips */
+    .frosting-drips {
+        position: absolute;
+        top: 25px; left: 0; width: 100%; height: 25px;
+        background: #ffffff;
+        background-image: radial-gradient(circle 10px at 20px 0px, transparent 98%, #ffffff 100%),
+                            radial-gradient(circle 14px at 60px 0px, transparent 98%, #ffffff 100%),
+                            radial-gradient(circle 12px at 105px 0px, transparent 98%, #ffffff 100%),
+                            radial-gradient(circle 15px at 150px 0px, transparent 98%, #ffffff 100%),
+                            radial-gradient(circle 11px at 195px 0px, transparent 98%, #ffffff 100%),
+                            radial-gradient(circle 13px at 235px 0px, transparent 98%, #ffffff 100%);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    /* Fresh Strawberry Toppings on Top */
+    .strawberry-toppings {
+        position: absolute;
+        top: 2px; left: 0; width: 100%;
+        display: flex;
+        justify-content: space-around;
+        padding: 0 25px;
+        z-index: 5;
+    }
+
+    .strawberry {
+        width: 22px;
+        height: 26px;
+        background: #ff3838;
+        border-radius: 50% 50% 40% 40%;
+        position: relative;
+        box-shadow: inset -3px -3px 6px rgba(0,0,0,0.2), 0 3px 5px rgba(0,0,0,0.15);
+        transform: rotate(-10deg);
+    }
+    .strawberry:nth-child(2) { transform: rotate(10deg); }
+    .strawberry:nth-child(3) { transform: rotate(-5deg); }
+    .strawberry:nth-child(4) { transform: rotate(15deg); }
+
+    /* Strawberry Green Leaf Stem */
+    .strawberry::before {
+        content: "";
+        position: absolute;
+        top: -4px; left: 50%;
+        transform: translateX(-50%);
+        width: 10px; height: 6px;
+        background: #2ed573;
+        border-radius: 50%;
+    }
+
+    .cake-plate {
+        width: 320px;
+        height: 16px;
+        background: linear-gradient(to bottom, #ffffff 0%, #dbe2e8 100%);
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.8);
+        z-index: 2;
+        margin-top: -2px;
+    }
+
+    /* --- INSTRUCTIONS / TIMER DISPLAY --- */
+    .instruction-text {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 500;
+        color: #555;
+        min-height: 35px;
+        transition: all 0.4s ease;
+    }
+
+    .timer-display {
+        font-family: 'Outfit', sans-serif;
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ff4757 0%, #ff8a9a 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+        margin: -0.5rem 0;
+        display: none;
+    }
+
+    /* --- REALISTIC BLOW WAVES ANIMATION CONTAINER --- */
+    .wind-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 20;
+        display: none;
+    }
+
+    .wind-line {
+        position: absolute;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+        height: 4px;
+        border-radius: 50%;
+        opacity: 0;
+        transform: translateX(-150px);
+    }
+
+    .wind-overlay.active .wind-line {
+        animation: blowWind 0.5s infinite linear;
+    }
+
+    .wind-line:nth-child(1) { top: 38%; width: 150px; animation-delay: 0s; }
+    .wind-line:nth-child(2) { top: 44%; width: 220px; animation-delay: 0.15s; }
+    .wind-line:nth-child(3) { top: 50%; width: 130px; animation-delay: 0.3s; }
+
+    @keyframes blowWind {
+        0% { transform: translateX(-150px) scaleX(0.5); opacity: 0; }
+        50% { opacity: 0.9; }
+        100% { transform: translateX(450px) scaleX(1.8); opacity: 0; }
+    }
+
+    /* --- START BUTTON --- */
+    .start-btn {
+        padding: 14px 38px;
+        background: linear-gradient(45deg, #ff4757 0%, #ff8a9a 100%);
+        color: white;
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 10px 25px rgba(255, 71, 87, 0.35);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .start-btn:hover {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 15px 30px rgba(255, 71, 87, 0.45);
+    }
+
+    .start-btn:active {
+        transform: translateY(1px);
+    }
+
+    /* --- WISH POPUP OVERLAY --- */
+    .wish-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(253, 250, 246, 0.85);
+        backdrop-filter: blur(8px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .wish-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .wish-box {
+        background: #ffffff;
+        padding: 3rem 4rem;
+        border-radius: 30px;
+        box-shadow: 0 25px 50px rgba(255, 107, 129, 0.2);
+        text-align: center;
+        border: 2px solid rgba(255, 138, 154, 0.3);
+        animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .wish-box h2 {
+        font-family: 'Alex Brush', cursive;
+        font-size: 4rem;
+        color: #ff4757;
+        margin-bottom: 0.5rem;
+    }
+
+    .wish-box p {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.2rem;
+        color: #666;
+        letter-spacing: 1px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    @keyframes popUp {
+        0% { transform: scale(0.8); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* --- NEXT BUTTON --- */
+    .next-page-btn {
+        position: fixed;
+        bottom: 30px; right: 30px;
+        padding: 14px 32px;
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 2px solid rgba(255, 255, 255, 1);
+        border-radius: 50px;
+        color: #ff4757;
+        font-family: 'Outfit', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-decoration: none;
+        box-shadow: 0 10px 25px rgba(255, 107, 129, 0.25);
+        display: flex; align-items: center; gap: 8px;
+        transition: all 0.3s ease; z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px);
+    }
+
+    .next-page-btn.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .next-page-btn:hover {
+        background: #ffffff;
+        transform: translateY(-4px);
+        box-shadow: 0 15px 30px rgba(255, 107, 129, 0.4);
+    }
+    .next-page-btn span { transition: transform 0.3s ease; }
+    .next-page-btn:hover span { transform: translateX(5px); }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        body { padding: 2rem 1rem 7rem 1rem; }
+        .celebration-card { padding: 2.5rem 1.5rem; }
+        .title-area h1 { font-size: 3.5rem; }
+        .wish-box { padding: 2rem; width: 90%; }
+        .wish-box h2 { font-size: 3.2rem; }
+        .next-page-btn { bottom: 20px; right: 20px; padding: 12px 24px; font-size: 1rem; }
+    }
+</style>
+</head>
+<body>
+
+<!-- Static Atmosphere Elements -->
+<div class="bg-aurora"></div>
+<div class="paper-texture"></div>
+
+<!-- Background Faded Memories -->
+<img src="/static/images/GroupPhoto.png" class="bg-memory bg-1" alt="">
+<img src="/static/images/AfterCelebration.png" class="bg-memory bg-2" alt="">
+<img src="/static/images/FirstCelebration.png" class="bg-memory bg-3" alt="">
+
+<!-- WISH POPUP OVERLAY -->
+<div class="wish-overlay" id="wishOverlay">
+    <div class="wish-box">
+        <h2>Shh...</h2>
+        <p>Make a wish quick! ✨</p>
+    </div>
+</div>
+
+<div class="celebration-card" style="position: relative;">
+    <!-- Realistic Wind Blow Waves Overlay -->
+    <div class="wind-overlay" id="windOverlay">
+        <div class="wind-line"></div>
+        <div class="wind-line"></div>
+        <div class="wind-line"></div>
+    </div>
+
+    <div class="title-area">
+        <h1>Happy Birthday! 🎂</h1>
+    </div>
+
+    <!-- SINGLE-LAYER PREMIUM STRAWBERRY CAKE WITH SINGLE CANDLE -->
+    <div class="cake-container">
+        <div class="candle-group">
+            <div class="flame" id="candleFlame"></div>
+            <div class="candle-stick"></div>
+        </div>
+
+        <div class="cake-layer">
+            <div class="cake-frosting-top"></div>
+            <div class="frosting-drips"></div>
+            <div class="strawberry-toppings">
+                <div class="strawberry"></div>
+                <div class="strawberry"></div>
+                <div class="strawberry"></div>
+                <div class="strawberry"></div>
+            </div>
+        </div>
+        <div class="cake-plate"></div>
+    </div>
+
+    <div class="instruction-text" id="instructionText">Click start to celebrate your special moment!</div>
+    
+    <div class="timer-display" id="timerDisplay">10</div>
+
+    <button class="start-btn" id="startBtn" onclick="startCelebrationSequence()">Start Celebration 🎉</button>
+</div>
+
+<!-- Floating Next Page Button -->
+<a href="/NextPage" class="next-page-btn" id="nextPageBtn">
+    Next <span>➔</span>
+</a>
+
+<script>
+    function fireConfettiCelebration() {
+        var duration = 4 * 1000;
+        var end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 8,
+                angle: 60,
+                spread: 70,
+                origin: { x: 0, y: 0.7 },
+                colors: ['#ff4757', '#ff8a9a', '#ffffff', '#ffd0d5', '#ff3838', '#2ed573'],
+                zIndex: 999
+            });
+            confetti({
+                particleCount: 8,
+                angle: 120,
+                spread: 70,
+                origin: { x: 1, y: 0.7 },
+                colors: ['#ff4757', '#ff8a9a', '#ffffff', '#ffd0d5', '#ff3838', '#2ed573'],
+                zIndex: 999
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    }
+
+    function startCelebrationSequence() {
+        const startBtn = document.getElementById('startBtn');
+        const wishOverlay = document.getElementById('wishOverlay');
+
+        // Hide start button
+        startBtn.style.display = 'none';
+
+        // 1. Show the "Make a wish quick" popup
+        wishOverlay.classList.add('show');
+
+        // 2. After exactly 3 seconds, hide popup and begin 10-second timer
+        setTimeout(() => {
+            wishOverlay.classList.remove('show');
+            beginTimer();
+        }, 3000);
+    }
+
+    function beginTimer() {
+        const instructionText = document.getElementById('instructionText');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const flame = document.getElementById('candleFlame');
+        const windOverlay = document.getElementById('windOverlay');
+        const nextPageBtn = document.getElementById('nextPageBtn');
+
+        // Update instruction text
+        instructionText.innerHTML = "Blow candles at... 🌬️🕯️";
+        
+        // Show timer and start at 10 seconds
+        timerDisplay.style.display = 'block';
+        let timeLeft = 10;
+        timerDisplay.innerHTML = timeLeft;
+
+        const countdownInterval = setInterval(() => {
+            timeLeft--;
+            timerDisplay.innerHTML = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                
+                // Trigger realistic wind blow animation right as the counter finishes
+                windOverlay.style.display = 'block';
+                windOverlay.classList.add('active');
+                flame.classList.add('blow-reaction');
+                instructionText.innerHTML = "Blow! 💨";
+
+                // After wind gust duration (1.2s), extinguish flame, pop confetti, and show success message
+                setTimeout(() => {
+                    windOverlay.classList.remove('active');
+                    windOverlay.style.display = 'none';
+                    flame.classList.remove('blow-reaction');
+                    flame.classList.add('extinguished');
+
+                    // Fire celebratory confetti and reveal success text right after timer ends
+                    fireConfettiCelebration();
+                    instructionText.innerHTML = "Happiest Birthday to My Dear Chhutki!🎉❤️✨";
+                    timerDisplay.style.display = 'none';
+
+                    // Reveal next page button
+                    nextPageBtn.classList.add('show');
+                }, 1200);
+            }
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
